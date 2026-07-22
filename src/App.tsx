@@ -1,5 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
-import { PlaceholderPage } from './pages/PlaceholderPage';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { PhotoPage } from './pages/PhotoPage';
 import { ParsingPage } from './pages/ParsingPage';
 import { PreviewPage } from './pages/PreviewPage';
@@ -22,7 +21,7 @@ export function AppRoutes() {
       <Route path="/eyes" element={<EyeGuidePage />} />
       <Route path="/library" element={<LibraryPage />} />
       <Route path="/mix" element={<MixPage />} />
-      <Route path="/profile" element={<PlaceholderPage title="我的" />} />
+      <Route path="/profile" element={<Navigate to="/library" replace />} />
     </Routes>
   );
 }

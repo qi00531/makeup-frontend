@@ -50,7 +50,7 @@ npm run lint
 | `/eyes` | `src/pages/EyeGuidePage.tsx` | 眼部区域精讲和视频切片 | 是 |
 | `/library` | `src/pages/LibraryPage.tsx` | 搜索、筛选教程和部位素材 | 是 |
 | `/mix` | `src/pages/MixPage.tsx` | 组合部位素材并生成定制教程 | 是 |
-| `/profile` | `src/pages/PlaceholderPage.tsx` | 我的占位页 | 暂不需要 |
+| `/profile` | 路由兼容转发 | 旧的“我的”地址，自动转到 `/library` | 否 |
 
 核心流程：
 
@@ -68,7 +68,7 @@ npm run lint
 素材混搭：/library → /mix → /tutorial
 ```
 
-底部导航固定为“首页 / 知识库 / 混搭 / 我的”。本版本明确不包含跟练页和 `/practice` 路由。
+底部导航固定为“首页 / 知识库 / 混搭”。“我的”能力已并入知识库，旧 `/profile` 地址会兼容跳转到 `/library`。本版本明确不包含跟练页和 `/practice` 路由。
 
 ## 4. 前端代码边界
 

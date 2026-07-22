@@ -86,7 +86,7 @@ h1, h2, h3, p { margin-top: 0; }
 .task-card__body strong { font-size: 12px; }.task-card__body small { margin-top: 4px; color: var(--muted); font-size: 9px; }
 .task-card > svg { color: var(--faint); }
 
-.bottom-nav { position: absolute; z-index: 20; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(4,1fr); min-height: calc(68px + env(safe-area-inset-bottom)); padding: 7px 7px env(safe-area-inset-bottom); border-top: 1px solid rgba(224,215,210,.82); background: rgba(255,253,251,.94); backdrop-filter: blur(16px); }
+.bottom-nav { position: absolute; z-index: 20; bottom: 0; left: 0; right: 0; display: grid; grid-template-columns: repeat(3,1fr); min-height: calc(68px + env(safe-area-inset-bottom)); padding: 7px 7px env(safe-area-inset-bottom); border-top: 1px solid rgba(224,215,210,.82); background: rgba(255,253,251,.94); backdrop-filter: blur(16px); }
 .bottom-nav__item { display: flex; min-height: 52px; align-items: center; justify-content: center; gap: 4px; flex-direction: column; color: #9b918d; border-radius: 10px; font-size: 9px; text-decoration: none; }
 .bottom-nav__item.is-active { color: var(--rose); font-weight: 700; }
 .bottom-nav__item.is-active::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }

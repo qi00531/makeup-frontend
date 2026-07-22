@@ -1,11 +1,10 @@
-import { Blend, BookOpen, Home, UserRound } from 'lucide-react';
+import { Blend, BookOpen, Home } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const items = [
   { to: '/', label: '首页', icon: Home },
   { to: '/library', label: '知识库', icon: BookOpen },
   { to: '/mix', label: '混搭', icon: Blend },
-  { to: '/profile', label: '我的', icon: UserRound },
 ];
 
 export function BottomNav() {

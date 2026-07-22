@@ -28,9 +28,17 @@ test('keeps bottom navigation on top-level destinations', async () => {
   expect(screen.getByRole('navigation', { name: '主导航' })).toBeInTheDocument();
 });
 
-test('uses home, library, mix and profile as top-level navigation', () => {
+test('merges profile into library and keeps three top-level destinations', () => {
   render(<MemoryRouter initialEntries={['/']}><AppRoutes /></MemoryRouter>);
 
   expect(screen.queryByRole('link', { name: /跟练/ })).not.toBeInTheDocument();
+  expect(screen.queryByRole('link', { name: '我的' })).not.toBeInTheDocument();
+  expect(screen.getAllByRole('link')).toHaveLength(3);
   expect(screen.getByRole('link', { name: /混搭/ })).toHaveAttribute('href', '/mix');
+});
+
+test('redirects the former profile route into the library', () => {
+  render(<MemoryRouter initialEntries={['/profile']}><AppRoutes /></MemoryRouter>);
+
+  expect(screen.getByRole('heading', { name: '知识库' })).toBeInTheDocument();
 });
