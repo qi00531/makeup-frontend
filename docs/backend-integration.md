@@ -52,6 +52,8 @@ npm run lint
 | `/eyes` | `src/pages/EyeGuidePage.tsx` | 眼部区域精讲和视频切片 | 是 |
 | `/library` | `src/pages/LibraryPage.tsx` | 教程、部位与混搭三个 TAB | 是 |
 | `/mix` | `src/pages/MixPage.tsx` | 旧地址，兼容转到 `/library?tab=mix` | 否 |
+| `/mix/generating` | `src/pages/MixGeneratingPage.tsx` | 展示预制妆效匹配进度 | 是 |
+| `/mix/preview` | `src/pages/MixPreviewPage.tsx` | 展示预制混搭妆前/妆后效果 | 是 |
 | `/profile` | `src/pages/ProfilePage.tsx` | 个人档案、学习数据、偏好和隐私入口 | 是 |
 
 核心流程：
@@ -67,7 +69,8 @@ npm run lint
 ```text
 适合我：/preview → /tutorial → /eyes
 需要微调：/preview → /adjust → /tutorial → /eyes
-素材混搭：/library?tab=mix → /tutorial
+素材混搭：/library?tab=mix → /mix/generating → /mix/preview → /tutorial
+素材混搭微调：/mix/preview → /adjust → /tutorial
 ```
 
 底部导航固定为“首页 / 知识库 / 我的”。混搭编辑已迁入知识库第三个 TAB，旧 `/mix` 地址会保留部位和素材查询参数后转发。底部导航使用固定定位，不随手机内容滚动。本版本明确不包含跟练页和 `/practice` 路由。
@@ -110,7 +113,7 @@ src/types/learning.ts
 src/services/learningService.ts
 ```
 
-`LearningService` 负责获取图示教程、眼部精讲、知识库素材、兼容性提示和生成定制教程。后端接入时应替换服务实现，不改页面的调用方式。
+`LearningService` 负责获取图示教程、眼部精讲、知识库预制素材，以及根据完整混搭选择返回预制效果。后端接入时应替换服务实现，不改页面的调用方式。
 
 后端接入建议新建：
 
@@ -353,27 +356,43 @@ GET /api/v1/makeup/tutorials/{tutorialId}/eye-guides
 GET /api/v1/makeup/library/assets?category=part&part=eyes
 ```
 
-返回 `LibraryAsset[]`。`category` 只允许 `tutorial`、`part`、`product`；`part` 只允许 `base`、`brows`、`eyes`、`blush`、`contour`、`highlight`、`lips`。
+返回 `LibraryAsset[]`。每项必须包含可直接显示的 `coverImage` 和可跳转的 `tutorialId`。这些素材均由产品或后端预先配置：前端只展示视频封面，不提供用户上传入口，也不在知识库中播放视频；点击卡片后进入 `tutorialId` 对应的预制图示教程。
 
-### 6.9 检查混搭兼容性并生成教程
+`category` 只允许 `tutorial`、`part`、`product`；当前混搭使用的 `part` 只允许 `base`、`eyes`、`blush`、`contour`、`lips`。
+
+### 6.9 匹配预制混搭效果
 
 ```http
-POST /api/v1/makeup/mixes/compatibility
 POST /api/v1/makeup/mixes
 Content-Type: application/json
 ```
 
-请求体为部位到素材 ID 的映射：
+请求体为固定五个部位到素材 ID 的映射。每个键都必须提交；用户跳过的部位传 `null`：
 
 ```json
 {
+  "base": null,
   "eyes": "eyes-rose",
   "blush": "blush-sheer",
+  "contour": null,
   "lips": "lips-rose"
 }
 ```
 
-兼容性接口返回 `CompatibilityHint[]`；生成接口返回 `IllustratedTutorial`。服务端必须验证素材是否存在、是否属于当前用户，以及素材部位与键名是否一致。
+前端只有在五个部位都完成“选择素材”或“跳过”后才允许提交。接口不执行开放式实时生成，而是匹配预先准备的结果并返回 `MixResult`：
+
+```json
+{
+  "id": "mix-result-001",
+  "beforeImage": "/assets/presets/mix-001-before.jpg",
+  "afterImage": "/assets/presets/mix-001-after.jpg",
+  "title": "我的混搭定制妆",
+  "summary": "已根据五个部位的预制选择完成妆效匹配。",
+  "tutorialId": "tutorial-mix-001"
+}
+```
+
+`beforeImage` 和 `afterImage` 用于现有左右滑动对比；`tutorialId` 必须指向对应的预制图示教程。用户选择“适合我”时直接进入该教程；选择“需要微调”时，前端会把这个 `tutorialId` 作为 `baseTutorialId` 随微调请求提交，后端应在该预制教程基础上返回结果。
 
 ## 7. 状态枚举
 

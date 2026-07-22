@@ -16,14 +16,17 @@ test('moves from preview through adjustment to tutorial and eye guide', async ()
   expect(screen.queryByRole('link', { name: /跟练/ })).not.toBeInTheDocument();
 });
 
-test('preselects any part asset in mix and generates its tutorial', async () => {
+test('resolves every mix part before loading a preset preview and tutorial', async () => {
   const user = userEvent.setup();
-  render(<MemoryRouter initialEntries={['/mix?part=blush&asset=blush-peach']}><AppRoutes /></MemoryRouter>);
+  render(<MemoryRouter initialEntries={['/library?tab=mix']}><AppRoutes /></MemoryRouter>);
 
-  expect((await screen.findAllByText('蜜桃氛围腮红')).length).toBeGreaterThan(0);
-  await user.click(screen.getByRole('button', { name: '生成教程' }));
+  const skipButtons = await screen.findAllByRole('button', { name: '跳过此部位' });
+  expect(screen.getByRole('button', { name: '生成效果' })).toBeDisabled();
+  for (const button of skipButtons) await user.click(button);
+  await user.click(screen.getByRole('button', { name: '生成效果' }));
 
+  expect(await screen.findByRole('heading', { name: '生成妆效中' })).toBeInTheDocument();
+  expect(await screen.findByRole('heading', { name: '混搭效果预览' }, { timeout: 3000 })).toBeInTheDocument();
+  await user.click(await screen.findByRole('button', { name: '适合我' }));
   expect(await screen.findByRole('heading', { name: '图示教程' })).toBeInTheDocument();
-  await user.click(screen.getByRole('button', { name: '5. 腮红上移' }));
-  expect(screen.getByText('蜜桃氛围腮红')).toBeInTheDocument();
 });

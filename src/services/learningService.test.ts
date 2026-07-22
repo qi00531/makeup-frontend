@@ -5,6 +5,7 @@ test('filters library assets by search and category', async () => {
 
   expect(assets.every((asset) => asset.category === 'part')).toBe(true);
   expect(assets.some((asset) => asset.title.includes('眼妆'))).toBe(true);
+  expect(assets.every((asset) => asset.coverImage && asset.tutorialId)).toBe(true);
 });
 
 test('reports a style conflict for strong eyes and sheer cheeks', async () => {
@@ -41,14 +42,17 @@ test('keeps personalized adjustment and mix results as the current tutorial', as
   expect(JSON.parse(sessionStorage.getItem('makeupAdjustment') ?? '{}')).toEqual(request);
   expect((await learningService.getTutorial()).id).toBe(adjusted.id);
 
-  const mixed = await learningService.generateMix({ eyes: 'eyes-smoky', blush: 'blush-sheer' });
-  expect(mixed.steps.find((step) => step.part === 'eyes')?.product).toBe('低饱和烟熏眼妆');
-  expect((await learningService.getTutorial()).id).toBe(mixed.id);
+  const decision = { base: null, eyes: 'eyes-smoky', blush: 'blush-sheer', contour: null, lips: 'lips-rose' };
+  const mixed = await learningService.generateMix(decision);
+  expect(mixed.tutorialId).toContain('tutorial-mix-');
+  expect((await learningService.getTutorial(mixed.tutorialId)).steps.find((step) => step.part === 'eyes')?.product).toBe('低饱和烟熏眼妆');
+  expect(await learningService.getMixResult(mixed.id)).toEqual(mixed);
+  expect(JSON.parse(sessionStorage.getItem('makeupMixDecision') ?? '{}')).toEqual(decision);
 });
 
 test('selects tutorials by id so the default flow cannot reuse stale personalization', async () => {
-  const mixed = await learningService.generateMix({ blush: 'blush-peach' });
+  const mixed = await learningService.generateMix({ base: null, eyes: null, blush: 'blush-peach', contour: null, lips: null });
 
-  expect((await learningService.getTutorial(mixed.id)).id).toBe(mixed.id);
+  expect((await learningService.getTutorial(mixed.tutorialId)).id).toBe(mixed.tutorialId);
   expect((await learningService.getTutorial('tutorial-rose-commute')).title).toBe('清透玫瑰通勤妆');
 });

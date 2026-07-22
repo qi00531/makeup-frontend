@@ -9,6 +9,7 @@ export interface AdjustmentRequest {
   skinType: string;
   concerns: string[];
   constraints: string[];
+  baseTutorialId?: string;
 }
 
 export interface TutorialStep {
@@ -53,6 +54,8 @@ export interface LibraryAsset {
   difficulty: string;
   color: string;
   practiced: boolean;
+  coverImage: string;
+  tutorialId: string;
 }
 
 export interface LibraryFilter {
@@ -65,6 +68,17 @@ export interface LibraryFilter {
 }
 
 export type MixSelection = Partial<Record<MakeupPart, string>>;
+export type MixPart = 'base' | 'eyes' | 'blush' | 'contour' | 'lips';
+export type MixDecision = Record<MixPart, string | null>;
+
+export interface MixResult {
+  id: string;
+  beforeImage: string;
+  afterImage: string;
+  title: string;
+  summary: string;
+  tutorialId: string;
+}
 
 export interface CompatibilityHint {
   type: 'compatible' | 'style-conflict' | 'difficulty' | 'color-conflict';
@@ -78,5 +92,6 @@ export interface LearningService {
   getEyeGuides(tutorialId?: string): Promise<EyeRegionGuide[]>;
   listAssets(filter: LibraryFilter): Promise<LibraryAsset[]>;
   checkCompatibility(selection: MixSelection): Promise<CompatibilityHint[]>;
-  generateMix(selection: MixSelection): Promise<IllustratedTutorial>;
+  generateMix(decision: MixDecision): Promise<MixResult>;
+  getMixResult(resultId?: string): Promise<MixResult | null>;
 }

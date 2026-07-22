@@ -1,3 +1,7 @@
+import faceAfter from '../assets/face-after.svg';
+import faceBefore from '../assets/face-before.svg';
+import tutorialCover from '../assets/analysis-collage.svg';
+import partCover from '../assets/photo-collage.svg';
 import type {
   AdjustmentRequest,
   CompatibilityHint,
@@ -6,6 +10,8 @@ import type {
   LearningService,
   LibraryAsset,
   LibraryFilter,
+  MixDecision,
+  MixResult,
   MixSelection,
 } from '../types/learning';
 
@@ -37,16 +43,18 @@ const eyeGuides: EyeRegionGuide[] = [
 ];
 
 const assets: LibraryAsset[] = [
-  { id: 'tutorial-commute', title: '清透通勤全妆', category: 'tutorial', source: '自然日常妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#d9b3aa', practiced: true },
-  { id: 'tutorial-date', title: '柔粉约会妆', category: 'tutorial', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#d98698', practiced: false },
-  { id: 'eyes-rose', title: '清透玫瑰眼妆', category: 'part', part: 'eyes', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#bd7b82', practiced: true },
-  { id: 'eyes-smoky', title: '低饱和烟熏眼妆', category: 'part', part: 'eyes', source: '冷感夜幕妆', style: '冷感', occasion: '聚会', difficulty: '进阶', color: '#716363', practiced: false },
-  { id: 'blush-sheer', title: '清透上移腮红', category: 'part', part: 'blush', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dd8b8a', practiced: true },
-  { id: 'blush-peach', title: '蜜桃氛围腮红', category: 'part', part: 'blush', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#e69a88', practiced: false },
-  { id: 'lips-rose', title: '低饱和玫瑰唇', category: 'part', part: 'lips', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#a94f5b', practiced: false },
-  { id: 'product-shadow', title: '裸粉四色眼影', category: 'product', part: 'eyes', source: '常用产品', style: '自然', occasion: '日常', difficulty: '新手', color: '#bc8584', practiced: true },
-  { id: 'product-blush', title: '柔雾玫瑰腮红', category: 'product', part: 'blush', source: '常用产品', style: '甜美', occasion: '约会', difficulty: '新手', color: '#d8757f', practiced: false },
-  { id: 'product-lip', title: '水光玫瑰唇釉', category: 'product', part: 'lips', source: '常用产品', style: '清透', occasion: '日常', difficulty: '新手', color: '#a84d58', practiced: true },
+  { id: 'tutorial-commute', title: '清透通勤全妆', category: 'tutorial', source: '自然日常妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#d9b3aa', practiced: true, coverImage: tutorialCover, tutorialId: 'preset-tutorial-commute' },
+  { id: 'tutorial-date', title: '柔粉约会妆', category: 'tutorial', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#d98698', practiced: false, coverImage: tutorialCover, tutorialId: 'preset-tutorial-date' },
+  { id: 'base-sheer', title: '轻薄柔焦底妆', category: 'part', part: 'base', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dfc5ba', practiced: true, coverImage: partCover, tutorialId: 'preset-base-sheer' },
+  { id: 'eyes-rose', title: '清透玫瑰眼妆', category: 'part', part: 'eyes', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#bd7b82', practiced: true, coverImage: partCover, tutorialId: 'preset-eyes-rose' },
+  { id: 'eyes-smoky', title: '低饱和烟熏眼妆', category: 'part', part: 'eyes', source: '冷感夜幕妆', style: '冷感', occasion: '聚会', difficulty: '进阶', color: '#716363', practiced: false, coverImage: partCover, tutorialId: 'preset-eyes-smoky' },
+  { id: 'blush-sheer', title: '清透上移腮红', category: 'part', part: 'blush', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dd8b8a', practiced: true, coverImage: partCover, tutorialId: 'preset-blush-sheer' },
+  { id: 'blush-peach', title: '蜜桃氛围腮红', category: 'part', part: 'blush', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#e69a88', practiced: false, coverImage: partCover, tutorialId: 'preset-blush-peach' },
+  { id: 'contour-soft', title: '柔和轮廓修容', category: 'part', part: 'contour', source: '自然日常妆', style: '自然', occasion: '日常', difficulty: '新手', color: '#b18b7b', practiced: true, coverImage: partCover, tutorialId: 'preset-contour-soft' },
+  { id: 'lips-rose', title: '低饱和玫瑰唇', category: 'part', part: 'lips', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#a94f5b', practiced: false, coverImage: partCover, tutorialId: 'preset-lips-rose' },
+  { id: 'product-shadow', title: '裸粉四色眼影', category: 'product', part: 'eyes', source: '常用产品', style: '自然', occasion: '日常', difficulty: '新手', color: '#bc8584', practiced: true, coverImage: partCover, tutorialId: 'preset-product-shadow' },
+  { id: 'product-blush', title: '柔雾玫瑰腮红', category: 'product', part: 'blush', source: '常用产品', style: '甜美', occasion: '约会', difficulty: '新手', color: '#d8757f', practiced: false, coverImage: partCover, tutorialId: 'preset-product-blush' },
+  { id: 'product-lip', title: '水光玫瑰唇釉', category: 'product', part: 'lips', source: '常用产品', style: '清透', occasion: '日常', difficulty: '新手', color: '#a84d58', practiced: true, coverImage: partCover, tutorialId: 'preset-product-lip' },
 ];
 
 const tutorials = new Map<string, IllustratedTutorial>([[tutorial.id, tutorial]]);
@@ -66,10 +74,8 @@ function rememberTutorial(next: IllustratedTutorial) {
 class LocalLearningService implements LearningService {
   async saveAdjustment(request: AdjustmentRequest) {
     sessionStorage.setItem('makeupAdjustment', JSON.stringify(request));
-    const adjusted = copyTutorial({
-      id: `tutorial-adjusted-${Date.now()}`,
-      title: `${request.styles[0] ?? '专属'}·${request.occasions[0] ?? '全场景'}定制妆`,
-    });
+    const source = request.baseTutorialId ? tutorials.get(request.baseTutorialId) ?? tutorial : tutorial;
+    const adjusted: IllustratedTutorial = { ...source, id: `tutorial-adjusted-${Date.now()}`, title: `${request.styles[0] ?? '专属'}·${request.occasions[0] ?? '全场景'}定制妆`, steps: source.steps.map((step) => ({ ...step })) };
     return rememberTutorial(adjusted);
   }
 
@@ -77,6 +83,8 @@ class LocalLearningService implements LearningService {
     const requestedId = tutorialId ?? currentTutorialId;
     const known = tutorials.get(requestedId);
     if (known) return rememberTutorial(known);
+    const presetAsset = assets.find((asset) => asset.tutorialId === requestedId);
+    if (presetAsset) return rememberTutorial(copyTutorial({ id: presetAsset.tutorialId, title: presetAsset.title }));
     try {
       const stored = JSON.parse(sessionStorage.getItem('makeupTutorial') ?? 'null') as IllustratedTutorial | null;
       if (stored?.id === requestedId) return rememberTutorial(stored);
@@ -105,19 +113,31 @@ class LocalLearningService implements LearningService {
     return [{ type: 'compatible', message: '当前部位风格协调', suggestion: '可以直接生成这套定制教程。' }];
   }
 
-  async generateMix(selection: MixSelection) {
-    const selected = Object.entries(selection)
+  async generateMix(decision: MixDecision): Promise<MixResult> {
+    sessionStorage.setItem('makeupMixDecision', JSON.stringify(decision));
+    const selected = Object.entries(decision)
       .map(([part, id]) => ({ part, asset: assets.find((item) => item.id === id) }))
       .filter((item) => item.asset);
+    const stamp = Date.now();
     const mixed = copyTutorial({
-      id: `tutorial-mix-${Date.now()}`,
+      id: `tutorial-mix-${stamp}`,
       title: '我的混搭定制妆',
       steps: tutorial.steps.map((step) => {
         const match = selected.find((item) => item.part === step.part)?.asset;
         return match ? { ...step, product: match.title, color: match.color } : { ...step };
       }),
     });
-    return rememberTutorial(mixed);
+    rememberTutorial(mixed);
+    const result: MixResult = { id: `mix-result-${stamp}`, beforeImage: faceBefore, afterImage: faceAfter, title: '我的混搭定制妆', summary: '已根据五个部位的预制选择完成妆效匹配。', tutorialId: mixed.id };
+    sessionStorage.setItem('makeupMixResult', JSON.stringify(result));
+    return result;
+  }
+
+  async getMixResult(resultId?: string): Promise<MixResult | null> {
+    try {
+      const stored = JSON.parse(sessionStorage.getItem('makeupMixResult') ?? 'null') as MixResult | null;
+      return stored && (!resultId || stored.id === resultId) ? stored : null;
+    } catch { return null; }
   }
 }
 

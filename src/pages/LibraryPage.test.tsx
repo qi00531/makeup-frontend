@@ -1,7 +1,13 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { LibraryPage } from './LibraryPage';
+
+function TutorialTarget() {
+  const location = useLocation();
+  const state = location.state as { tutorialId?: string } | null;
+  return <h1>图示教程 <span>{state?.tutorialId}</span></h1>;
+}
 
 test('filters assets and sends a selected part to mix editor', async () => {
   const user = userEvent.setup();
@@ -9,7 +15,7 @@ test('filters assets and sends a selected part to mix editor', async () => {
     <MemoryRouter initialEntries={['/library']}>
       <Routes>
         <Route path="/library" element={<LibraryPage />} />
-        <Route path="/tutorial" element={<h1>图示教程</h1>} />
+        <Route path="/tutorial" element={<TutorialTarget />} />
       </Routes>
     </MemoryRouter>,
   );
@@ -25,12 +31,12 @@ test('filters assets and sends a selected part to mix editor', async () => {
   expect(screen.queryByRole('button', { name: '高光' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '清透' })).not.toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: '眼妆' }));
+  expect(await screen.findByRole('img', { name: '清透玫瑰眼妆视频封面' })).toBeInTheDocument();
+  expect(document.querySelector('input[type="file"]')).not.toBeInTheDocument();
+  expect(document.querySelector('video')).not.toBeInTheDocument();
   await user.click(await screen.findByRole('button', { name: /清透玫瑰眼妆/ }));
 
-  expect(screen.getByRole('region', { name: '混搭编辑' })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: '我的定制妆容' })).toBeInTheDocument();
-  expect(screen.queryByText('MIX & MATCH')).not.toBeInTheDocument();
-  expect(screen.queryByText('把收藏的部位素材组成你的定制妆容')).not.toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /图示教程/ })).toHaveTextContent('preset-eyes-rose');
 });
 
 test('replaces the product tab with the embedded mix editor', async () => {
@@ -43,6 +49,7 @@ test('replaces the product tab with the embedded mix editor', async () => {
   await user.click(screen.getByRole('tab', { name: '混搭' }));
 
   expect(screen.getByRole('region', { name: '混搭编辑' })).toBeInTheDocument();
-  expect(screen.getByRole('heading', { name: '我的定制妆容' })).toBeInTheDocument();
+  expect(screen.getByText('已完成 0/5')).toBeInTheDocument();
+  expect(screen.queryByRole('img', { name: '混搭妆容预览' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '筛选' })).not.toBeInTheDocument();
 });

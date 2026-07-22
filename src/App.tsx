@@ -7,6 +7,8 @@ import { AdjustPage } from './pages/AdjustPage';
 import { EyeGuidePage } from './pages/EyeGuidePage';
 import { LibraryPage } from './pages/LibraryPage';
 import { MixPage } from './pages/MixPage';
+import { MixGeneratingPage } from './pages/MixGeneratingPage';
+import { MixPreviewPage } from './pages/MixPreviewPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { TutorialPage } from './pages/TutorialPage';
 
@@ -22,6 +24,8 @@ export function AppRoutes() {
       <Route path="/eyes" element={<EyeGuidePage />} />
       <Route path="/library" element={<LibraryPage />} />
       <Route path="/mix" element={<MixPage />} />
+      <Route path="/mix/generating" element={<MixGeneratingPage />} />
+      <Route path="/mix/preview" element={<MixPreviewPage />} />
       <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   );

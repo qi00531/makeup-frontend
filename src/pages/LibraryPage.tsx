@@ -37,8 +37,7 @@ export function LibraryPage() {
   }, [category, style, part, occasion, difficulty]);
 
   function selectAsset(asset: LibraryAsset) {
-    if (asset.category === 'part' && asset.part) navigate(`/library?tab=mix&part=${asset.part}&asset=${asset.id}`);
-    else if (asset.category === 'tutorial') navigate('/tutorial');
+    navigate('/tutorial', { state: { from: `/library?tab=${category}`, tutorialId: asset.tutorialId } });
   }
 
   return (

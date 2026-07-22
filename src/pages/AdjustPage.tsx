@@ -1,7 +1,7 @@
 import { ArrowLeft, Check, ChevronRight, Hand, Palette, ScanFace, WandSparkles } from 'lucide-react';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { BottomNav } from '../components/BottomNav';
 import { MobileShell } from '../components/MobileShell';
 import { learningService } from '../services/learningService';
@@ -26,6 +26,8 @@ function MultiChoice({ name, options, selected, onChange }: { name: string; opti
 
 export function AdjustPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const routeState = location.state as { from?: string; baseTutorialId?: string } | null;
   const [styles, setStyles] = useState<string[]>([]);
   const [occasions, setOccasions] = useState<string[]>([]);
   const [retainedParts, setRetainedParts] = useState<string[]>([]);
@@ -37,8 +39,8 @@ export function AdjustPage() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     setSubmitting(true);
-    const tutorial = await learningService.saveAdjustment({ styles, occasions, retainedParts, skinType, concerns, constraints });
-    navigate('/tutorial', { state: { from: '/adjust', tutorialId: tutorial.id } });
+    const tutorial = await learningService.saveAdjustment({ styles, occasions, retainedParts, skinType, concerns, constraints, baseTutorialId: routeState?.baseTutorialId });
+    navigate('/tutorial', { state: { from: routeState?.from ?? '/adjust', tutorialId: tutorial.id } });
   }
 
   return (
