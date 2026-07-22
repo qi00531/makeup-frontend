@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { PhotoPage } from './pages/PhotoPage';
+import { ParsingPage } from './pages/ParsingPage';
 import { UploadPage } from './pages/UploadPage';
 
 export function AppRoutes() {
@@ -8,6 +9,7 @@ export function AppRoutes() {
     <Routes>
       <Route path="/" element={<UploadPage />} />
       <Route path="/photo" element={<PhotoPage />} />
+      <Route path="/parsing" element={<ParsingPage />} />
       <Route path="/practice" element={<PlaceholderPage title="跟练" />} />
       <Route path="/library" element={<PlaceholderPage title="知识库" />} />
       <Route path="/profile" element={<PlaceholderPage title="我的" />} />
