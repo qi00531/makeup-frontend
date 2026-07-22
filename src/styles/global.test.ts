@@ -19,7 +19,8 @@ test('uses the provided bitmap assets as page backgrounds', () => {
   expect(learningCss).toContain("url('../assets/bg-library-flower.png')");
 });
 
-test('keeps the library tabs compact beside the filter button', () => {
-  expect(learningCss).toMatch(/\.library-tab-row\s*\{[^}]*grid-template-columns:\s*minmax\(0,280px\)\s+44px/);
-  expect(learningCss).toMatch(/\.library-tab-row\s*\{[^}]*justify-content:\s*space-between/);
+test('keeps the library tabs long and slim beside the filter button', () => {
+  expect(learningCss).toMatch(/\.library-tab-row\s*\{[^}]*grid-template-columns:\s*minmax\(0,1fr\)\s+44px/);
+  expect(learningCss).toMatch(/\.library-tabs\s*\{[^}]*padding:\s*3px/);
+  expect(learningCss).toMatch(/\.library-tabs button\s*\{[^}]*min-height:\s*38px/);
 });
