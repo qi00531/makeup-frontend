@@ -28,6 +28,12 @@ test('filters part assets by makeup part', async () => {
   expect(assets.every((asset) => asset.category === 'part' && asset.part === 'eyes')).toBe(true);
 });
 
+test('exposes only one eye contour and lip asset to the part library', async () => {
+  const assets = await learningService.listAssets({ category: 'part', placement: 'library' });
+
+  expect(assets.map(({ part }) => part)).toEqual(['eyes', 'contour', 'lips']);
+});
+
 test('keeps personalized adjustment and mix results as the current tutorial', async () => {
   const request = {
     styles: ['清冷高级', '个性酷感'],

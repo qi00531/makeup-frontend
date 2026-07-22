@@ -33,7 +33,7 @@ export function LibraryPage() {
 
   useEffect(() => {
     if (category === 'mix') return;
-    void learningService.listAssets({ category, style: category === 'tutorial' ? style : '全部', part: category === 'part' && part !== '全部' ? part : undefined, occasion, difficulty }).then(setAssets);
+    void learningService.listAssets({ category, placement: category === 'part' ? 'library' : undefined, style: category === 'tutorial' ? style : '全部', part: category === 'part' && part !== '全部' ? part : undefined, occasion, difficulty }).then(setAssets);
   }, [category, style, part, occasion, difficulty]);
 
   function selectAsset(asset: LibraryAsset) {
@@ -52,7 +52,7 @@ export function LibraryPage() {
           ? <div className="filter-scroll" aria-label="部位筛选">{parts.map((item) => <button type="button" key={item.id} className={part === item.id ? 'is-active' : ''} onClick={() => setPart(item.id)}>{item.label}</button>)}</div>
           : <div className="filter-scroll" aria-label="风格筛选">{styles.map((item) => <button type="button" key={item} className={style === item ? 'is-active' : ''} onClick={() => setStyle(item)}>{item}</button>)}</div>}
         {filtersOpen && <section className="advanced-filters" aria-label="更多筛选"><label><span>场合</span><select aria-label="场合筛选" value={occasion} onChange={(event) => setOccasion(event.target.value)}>{occasions.map((item) => <option key={item}>{item}</option>)}</select></label><label><span>难度</span><select aria-label="难度筛选" value={difficulty} onChange={(event) => setDifficulty(event.target.value)}>{difficulties.map((item) => <option key={item}>{item}</option>)}</select></label></section>}
-        <section className="asset-section" aria-live="polite"><div className="section-heading"><h2>{tabs.find((tab) => tab.id === category)?.label}资产</h2><span>{assets.length} 项</span></div>{assets.length ? <div className="asset-grid">{assets.map((asset) => <AssetCard key={asset.id} asset={asset} onSelect={selectAsset} />)}</div> : <div className="empty-library"><Search size={25} /><p>没有找到匹配的素材</p><button type="button" onClick={() => { setStyle('全部'); setOccasion('全部'); setDifficulty('全部'); }}>清除筛选</button></div>}</section>
+        <section className="asset-section" aria-live="polite">{assets.length ? <div className="asset-grid">{assets.map((asset) => <AssetCard key={asset.id} asset={asset} onSelect={selectAsset} />)}</div> : <div className="empty-library"><Search size={25} /><p>没有找到匹配的素材</p><button type="button" onClick={() => { setStyle('全部'); setOccasion('全部'); setDifficulty('全部'); }}>清除筛选</button></div>}</section>
       </>}
       <BottomNav />
     </MobileShell>

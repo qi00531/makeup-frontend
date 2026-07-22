@@ -42,16 +42,18 @@ const eyeGuides: EyeRegionGuide[] = [
   { id: 'distance', label: '眉眼距离', description: '眉骨下方保持干净，弱化深色过渡。', adaptation: '保留充足留白会让妆面更轻盈。', color: '#e8c4bb', videoSlice: '04:12–04:18' },
 ];
 
-const assets: LibraryAsset[] = [
+type CuratedAsset = LibraryAsset & { placements?: Array<'library' | 'mix'> };
+
+const assets: CuratedAsset[] = [
   { id: 'tutorial-commute', title: '清透通勤全妆', category: 'tutorial', source: '自然日常妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#d9b3aa', practiced: true, coverImage: tutorialCover, tutorialId: 'preset-tutorial-commute' },
   { id: 'tutorial-date', title: '柔粉约会妆', category: 'tutorial', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#d98698', practiced: false, coverImage: tutorialCover, tutorialId: 'preset-tutorial-date' },
-  { id: 'base-sheer', title: '轻薄柔焦底妆', category: 'part', part: 'base', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dfc5ba', practiced: true, coverImage: partCover, tutorialId: 'preset-base-sheer' },
-  { id: 'eyes-rose', title: '清透玫瑰眼妆', category: 'part', part: 'eyes', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#bd7b82', practiced: true, coverImage: partCover, tutorialId: 'preset-eyes-rose' },
-  { id: 'eyes-smoky', title: '低饱和烟熏眼妆', category: 'part', part: 'eyes', source: '冷感夜幕妆', style: '冷感', occasion: '聚会', difficulty: '进阶', color: '#716363', practiced: false, coverImage: partCover, tutorialId: 'preset-eyes-smoky' },
-  { id: 'blush-sheer', title: '清透上移腮红', category: 'part', part: 'blush', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dd8b8a', practiced: true, coverImage: partCover, tutorialId: 'preset-blush-sheer' },
-  { id: 'blush-peach', title: '蜜桃氛围腮红', category: 'part', part: 'blush', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#e69a88', practiced: false, coverImage: partCover, tutorialId: 'preset-blush-peach' },
-  { id: 'contour-soft', title: '柔和轮廓修容', category: 'part', part: 'contour', source: '自然日常妆', style: '自然', occasion: '日常', difficulty: '新手', color: '#b18b7b', practiced: true, coverImage: partCover, tutorialId: 'preset-contour-soft' },
-  { id: 'lips-rose', title: '低饱和玫瑰唇', category: 'part', part: 'lips', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#a94f5b', practiced: false, coverImage: partCover, tutorialId: 'preset-lips-rose' },
+  { id: 'base-sheer', title: '轻薄柔焦底妆', category: 'part', part: 'base', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dfc5ba', practiced: true, coverImage: partCover, tutorialId: 'preset-base-sheer', placements: ['mix'] },
+  { id: 'eyes-rose', title: '清透玫瑰眼妆', category: 'part', part: 'eyes', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#bd7b82', practiced: true, coverImage: partCover, tutorialId: 'preset-eyes-rose', placements: ['library', 'mix'] },
+  { id: 'eyes-smoky', title: '低饱和烟熏眼妆', category: 'part', part: 'eyes', source: '冷感夜幕妆', style: '冷感', occasion: '聚会', difficulty: '进阶', color: '#716363', practiced: false, coverImage: partCover, tutorialId: 'preset-eyes-smoky', placements: ['mix'] },
+  { id: 'blush-sheer', title: '清透上移腮红', category: 'part', part: 'blush', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dd8b8a', practiced: true, coverImage: partCover, tutorialId: 'preset-blush-sheer', placements: ['mix'] },
+  { id: 'blush-peach', title: '蜜桃氛围腮红', category: 'part', part: 'blush', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#e69a88', practiced: false, coverImage: partCover, tutorialId: 'preset-blush-peach', placements: ['mix'] },
+  { id: 'contour-soft', title: '柔和轮廓修容', category: 'part', part: 'contour', source: '自然日常妆', style: '自然', occasion: '日常', difficulty: '新手', color: '#b18b7b', practiced: true, coverImage: partCover, tutorialId: 'preset-contour-soft', placements: ['library', 'mix'] },
+  { id: 'lips-rose', title: '低饱和玫瑰唇', category: 'part', part: 'lips', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#a94f5b', practiced: false, coverImage: partCover, tutorialId: 'preset-lips-rose', placements: ['library', 'mix'] },
   { id: 'product-shadow', title: '裸粉四色眼影', category: 'product', part: 'eyes', source: '常用产品', style: '自然', occasion: '日常', difficulty: '新手', color: '#bc8584', practiced: true, coverImage: partCover, tutorialId: 'preset-product-shadow' },
   { id: 'product-blush', title: '柔雾玫瑰腮红', category: 'product', part: 'blush', source: '常用产品', style: '甜美', occasion: '约会', difficulty: '新手', color: '#d8757f', practiced: false, coverImage: partCover, tutorialId: 'preset-product-blush' },
   { id: 'product-lip', title: '水光玫瑰唇釉', category: 'product', part: 'lips', source: '常用产品', style: '清透', occasion: '日常', difficulty: '新手', color: '#a84d58', practiced: true, coverImage: partCover, tutorialId: 'preset-product-lip' },
@@ -97,12 +99,13 @@ class LocalLearningService implements LearningService {
     const query = filter.query?.trim().toLocaleLowerCase() ?? '';
     return assets.filter((asset) => {
       const matchesCategory = !filter.category || asset.category === filter.category;
+      const matchesPlacement = !filter.placement || asset.placements?.includes(filter.placement);
       const matchesPart = !filter.part || asset.part === filter.part;
       const matchesStyle = !filter.style || filter.style === '全部' || asset.style === filter.style;
       const matchesOccasion = !filter.occasion || filter.occasion === '全部' || asset.occasion === filter.occasion;
       const matchesDifficulty = !filter.difficulty || filter.difficulty === '全部' || asset.difficulty === filter.difficulty;
       const haystack = `${asset.title}${asset.source}${asset.style}${asset.occasion}`.toLocaleLowerCase();
-      return matchesCategory && matchesPart && matchesStyle && matchesOccasion && matchesDifficulty && (!query || haystack.includes(query));
+      return matchesCategory && matchesPlacement && matchesPart && matchesStyle && matchesOccasion && matchesDifficulty && (!query || haystack.includes(query));
     });
   }
 

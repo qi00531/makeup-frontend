@@ -15,7 +15,7 @@ export function MixEditor() {
   const [decision, setDecision] = useState<MixDecision>(initialDecision);
   const [expandedParts, setExpandedParts] = useState<Set<MixPart>>(() => new Set());
 
-  useEffect(() => { void learningService.listAssets({ category: 'part' }).then(setAssets); }, []);
+  useEffect(() => { void learningService.listAssets({ category: 'part', placement: 'mix' }).then(setAssets); }, []);
   const assetsByPart = useMemo(() => Object.fromEntries(mixParts.map(({ id }) => [id, assets.filter((asset) => asset.part === id)])) as Record<MixPart, LibraryAsset[]>, [assets]);
 
   function decide(part: MixPart, value: string) {

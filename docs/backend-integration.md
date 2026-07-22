@@ -360,6 +360,8 @@ GET /api/v1/makeup/library/assets?category=part&part=eyes
 
 `category` 只允许 `tutorial`、`part`、`product`；当前混搭使用的 `part` 只允许 `base`、`eyes`、`blush`、`contour`、`lips`。
 
+知识库“部位”页与混搭选择器使用不同展示范围：部位页当前只预留眼妆、修容、唇妆各一个封面卡位；混搭仍可获得底妆、眼妆、腮红、修容、唇妆的全部预制选项。HTTP Service 可通过独立接口参数或前端映射实现该范围区分，但不能因为知识库只展示三个卡位而删除混搭所需素材。
+
 ### 6.9 匹配预制混搭效果
 
 ```http
