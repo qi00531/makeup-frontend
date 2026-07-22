@@ -9,6 +9,8 @@ test('edits and persists personal makeup preferences', async () => {
 
   expect(screen.getByText('MY BEAUTY PROFILE')).toBeInTheDocument();
   expect(screen.queryByRole('heading', { name: '我的' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: '最近收藏' })).not.toBeInTheDocument();
+  expect(screen.queryByText('清透玫瑰通勤妆')).not.toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: '偏好风格 清透自然' }));
   await user.click(screen.getByRole('option', { name: '冷感高级' }));
 

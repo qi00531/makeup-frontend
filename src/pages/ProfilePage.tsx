@@ -1,4 +1,4 @@
-import { Bell, ChevronRight, Heart, Palette, ShieldCheck, Sparkles, UserRound } from 'lucide-react';
+import { Bell, ChevronRight, Palette, ShieldCheck, Sparkles, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { BottomNav } from '../components/BottomNav';
 import { MobileShell } from '../components/MobileShell';
@@ -31,7 +31,6 @@ export function ProfilePage() {
         <button type="button" onClick={() => save({ ...profile, reminders: !profile.reminders })}><span><Bell size={17} /></span><div><strong>学习提醒</strong><small>{profile.reminders ? '已开启' : '已关闭'}</small></div><i className={profile.reminders ? 'is-on' : ''} aria-hidden="true" /></button>
         <button type="button"><span><ShieldCheck size={17} /></span><div><strong>隐私与数据</strong><small>管理照片和解析结果</small></div><ChevronRight size={16} /></button>
       </section>
-      <section className="profile-panel"><div className="section-heading"><h2>最近收藏</h2><Heart size={15} /></div><div className="profile-favorite"><i /><div><strong>清透玫瑰通勤妆</strong><small>上次学习·昨天</small></div><ChevronRight size={16} /></div></section>
       <BottomNav />
     </MobileShell>
   );
