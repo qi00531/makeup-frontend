@@ -27,7 +27,10 @@ test('filters assets and sends a selected part to mix editor', async () => {
   await user.click(screen.getByRole('button', { name: '眼妆' }));
   await user.click(await screen.findByRole('button', { name: /清透玫瑰眼妆/ }));
 
-  expect(screen.getByRole('heading', { name: '混搭编辑' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: '混搭编辑' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: '我的定制妆容' })).toBeInTheDocument();
+  expect(screen.queryByText('MIX & MATCH')).not.toBeInTheDocument();
+  expect(screen.queryByText('把收藏的部位素材组成你的定制妆容')).not.toBeInTheDocument();
 });
 
 test('replaces the product tab with the embedded mix editor', async () => {
@@ -39,6 +42,7 @@ test('replaces the product tab with the embedded mix editor', async () => {
   expect(screen.queryByRole('tab', { name: '产品' })).not.toBeInTheDocument();
   await user.click(screen.getByRole('tab', { name: '混搭' }));
 
-  expect(screen.getByRole('heading', { name: '混搭编辑' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: '混搭编辑' })).toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: '我的定制妆容' })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '筛选' })).not.toBeInTheDocument();
 });
