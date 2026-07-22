@@ -6,6 +6,8 @@ import type {
   UploadPhotoResult,
   UploadVideoResult,
 } from '../types/makeup';
+import faceAfter from '../assets/face-after.svg';
+import faceBefore from '../assets/face-before.svg';
 
 const MAX_VIDEO_SIZE = 500 * 1024 * 1024;
 const VIDEO_TYPES = new Set(['video/mp4', 'video/quicktime']);
@@ -75,8 +77,8 @@ class LocalMakeupService implements MakeupService {
       occasion: '通勤 · 日常',
       difficulty: '新手友好',
       duration: '约 18 分钟',
-      beforeImage: '/face-before.svg',
-      afterImage: '/face-after.svg',
+      beforeImage: faceBefore,
+      afterImage: faceAfter,
       palette: ['#ead6cf', '#d8aaa0', '#b87870', '#8e554f', '#f2e5dd'],
       hints: [
         { title: '适合你的眼型', description: '眼尾轻微上扬能保持利落，也不会显得过浓。', tone: 'positive' },
