@@ -31,3 +31,19 @@ test('returns directly to video upload instead of revisiting parsing', async () 
 
   expect(screen.getByRole('heading', { name: '上传教程' })).toBeInTheDocument();
 });
+
+test('routes suitability decisions into tutorial or adjustment', async () => {
+  const user = userEvent.setup();
+  render(
+    <MemoryRouter initialEntries={['/preview']}>
+      <Routes>
+        <Route path="/preview" element={<PreviewPage />} />
+        <Route path="/adjust" element={<h1>微调设置</h1>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+
+  await user.click(await screen.findByRole('button', { name: '需要微调' }));
+
+  expect(screen.getByRole('heading', { name: '微调设置' })).toBeInTheDocument();
+});
