@@ -39,15 +39,22 @@ npm run lint
 
 ## 3. 页面路由
 
+前端手机画布使用响应式尺寸：宽度在 `320–440px` 间跟随设备视口，高度使用当前设备的 `100dvh`，并通过安全区变量适配刘海屏和底部手势区。浏览器页面本身锁定不滚动，超出内容仅在手机画布内部滚动；桌面预览保持手机宽度并居中显示。
+
 | 路由 | 页面文件 | 用途 | 是否需要后端 |
 |---|---|---|---|
 | `/` | `src/pages/UploadPage.tsx` | 选择并上传教程视频 | 是 |
 | `/photo` | `src/pages/PhotoPage.tsx` | 上传本人照片或跳过 | 是 |
 | `/parsing` | `src/pages/ParsingPage.tsx` | 展示解析进度和失败信息 | 是 |
 | `/preview` | `src/pages/PreviewPage.tsx` | 展示妆前/妆后效果与适配建议 | 是 |
-| `/practice` | `src/pages/PlaceholderPage.tsx` | 跟练占位页 | 暂不需要 |
-| `/library` | `src/pages/PlaceholderPage.tsx` | 知识库占位页 | 暂不需要 |
-| `/profile` | `src/pages/PlaceholderPage.tsx` | 我的占位页 | 暂不需要 |
+| `/adjust` | `src/pages/AdjustPage.tsx` | 输入个人风格、脸部匹配和工具限制 | 是 |
+| `/tutorial` | `src/pages/TutorialPage.tsx` | 图示教程、步骤时间线与产品信息 | 是 |
+| `/eyes` | `src/pages/EyeGuidePage.tsx` | 眼部区域精讲和视频切片 | 是 |
+| `/library` | `src/pages/LibraryPage.tsx` | 教程、部位与混搭三个 TAB | 是 |
+| `/mix` | `src/pages/MixPage.tsx` | 旧地址，兼容转到 `/library?tab=mix` | 否 |
+| `/mix/generating` | `src/pages/MixGeneratingPage.tsx` | 展示预制妆效匹配进度 | 是 |
+| `/mix/preview` | `src/pages/MixPreviewPage.tsx` | 展示预制混搭妆前/妆后效果 | 是 |
+| `/profile` | `src/pages/ProfilePage.tsx` | 个人档案、学习数据、偏好和隐私入口 | 是 |
 
 核心流程：
 
@@ -56,6 +63,17 @@ npm run lint
 ```
 
 适配预览页的返回按钮会直接进入 `/`，不会重新进入解析页。
+
+预览后的学习流程：
+
+```text
+适合我：/preview → /tutorial → /eyes
+需要微调：/preview → /adjust → /tutorial → /eyes
+素材混搭：/library?tab=mix → /mix/generating → /mix/preview → /tutorial
+素材混搭微调：/mix/preview → /adjust → /tutorial
+```
+
+底部导航固定为“首页 / 知识库 / 我的”。混搭编辑已迁入知识库第三个 TAB，旧 `/mix` 地址会保留部位和素材查询参数后转发。底部导航使用固定定位，不随手机内容滚动。本版本明确不包含跟练页和 `/practice` 路由。
 
 ## 4. 前端代码边界
 
@@ -87,6 +105,15 @@ export interface MakeupService {
 ```text
 src/services/makeupService.ts
 ```
+
+新增学习与混搭能力的类型和服务边界分别位于：
+
+```text
+src/types/learning.ts
+src/services/learningService.ts
+```
+
+`LearningService` 负责获取图示教程、眼部精讲、知识库预制素材，以及根据完整混搭选择返回预制效果。后端接入时应替换服务实现，不改页面的调用方式。
 
 后端接入建议新建：
 
@@ -290,6 +317,85 @@ GET /api/v1/makeup/tasks/{taskId}/preview
 - 浏览器允许前端域名访问图片；若跨域，CDN 需正确设置 CORS。
 - 推荐 WebP 或 AVIF，并返回稳定的宽高，避免滑动对比时错位。
 
+### 6.6 保存微调条件并生成教程
+
+```http
+POST /api/v1/makeup/tasks/{taskId}/tutorials
+Content-Type: application/json
+```
+
+请求体对应 `AdjustmentRequest`：
+
+```json
+{
+  "styles": ["清透自然", "清冷高级"],
+  "occasions": ["通勤工作"],
+  "retainedParts": ["腮红", "眼妆"],
+  "skinType": "混合性肌肤",
+  "concerns": ["增加立体感", "放大眼睛"],
+  "constraints": ["没有专业刷具", "早上时间少"]
+}
+```
+
+`styles`、`occasions`、`retainedParts`、`concerns` 和 `constraints` 均为多选数组；`skinType` 为单选字符串。前端不再提交旧版 `style`、`occasion`、`tools` 或 `notes` 字段。
+
+成功响应对应 `IllustratedTutorial`，其 `steps` 必须按 `order` 排序，每一步包含部位、产品、色值、操作说明、专业提示和对应视频时间段。
+
+### 6.7 获取教程与眼部精讲
+
+```http
+GET /api/v1/makeup/tutorials/{tutorialId}
+GET /api/v1/makeup/tutorials/{tutorialId}/eye-guides
+```
+
+第一个接口返回 `IllustratedTutorial`，第二个返回 `EyeRegionGuide[]`。`videoSlice` 建议使用统一的秒数字段（例如 `startSeconds` / `endSeconds`）；当前前端模拟数据使用显示字符串，联调时可在 HTTP Service 内转换。
+
+### 6.8 查询知识库素材
+
+```http
+GET /api/v1/makeup/library/assets?category=part&part=eyes
+```
+
+返回 `LibraryAsset[]`。每项必须包含可直接显示的 `coverImage` 和可跳转的 `tutorialId`。这些素材均由产品或后端预先配置：前端只展示视频封面，不提供用户上传入口，也不在知识库中播放视频；点击卡片后进入 `tutorialId` 对应的预制图示教程。
+
+`category` 只允许 `tutorial`、`part`、`product`；当前混搭使用的 `part` 只允许 `base`、`eyes`、`blush`、`contour`、`lips`。
+
+知识库“部位”页与混搭选择器使用不同展示范围：部位页当前只预留眼妆、修容、唇妆各一个封面卡位；混搭仍可获得底妆、眼妆、腮红、修容、唇妆的全部预制选项。HTTP Service 可通过独立接口参数或前端映射实现该范围区分，但不能因为知识库只展示三个卡位而删除混搭所需素材。
+
+### 6.9 匹配预制混搭效果
+
+```http
+POST /api/v1/makeup/mixes
+Content-Type: application/json
+```
+
+请求体为固定五个部位到素材 ID 的映射。每个键都必须提交；用户跳过的部位传 `null`：
+
+```json
+{
+  "base": null,
+  "eyes": "eyes-rose",
+  "blush": "blush-sheer",
+  "contour": null,
+  "lips": "lips-rose"
+}
+```
+
+前端始终提交完整的五个部位键；每个部位默认值为 `null`，用户没有展开或展开后未选择素材时均按跳过处理，因此可以直接提交。接口不执行开放式实时生成，而是匹配预先准备的结果并返回 `MixResult`：
+
+```json
+{
+  "id": "mix-result-001",
+  "beforeImage": "/assets/presets/mix-001-before.jpg",
+  "afterImage": "/assets/presets/mix-001-after.jpg",
+  "title": "我的混搭定制妆",
+  "summary": "已根据五个部位的预制选择完成妆效匹配。",
+  "tutorialId": "tutorial-mix-001"
+}
+```
+
+`beforeImage` 和 `afterImage` 用于现有左右滑动对比；`tutorialId` 必须指向对应的预制图示教程。用户选择“适合我”时直接进入该教程；选择“需要微调”时，前端会把这个 `tutorialId` 作为 `baseTutorialId` 随微调请求提交，后端应在该预制教程基础上返回结果。
+
 ## 7. 状态枚举
 
 解析任务状态：
@@ -385,9 +491,10 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 4. 修改照片页，在确认或跳过时调用照片接口。
 5. 将 `analyze()` 替换为轮询或 SSE 实现。
 6. 将适配预览切换到真实任务结果。
-7. 刷新页面时根据 `taskId` 恢复服务端任务状态。
-8. 添加接口错误、超时、鉴权失败和任务不存在的自动化测试。
-9. 在联调环境验证大文件上传、慢网络和解析失败恢复。
+7. 新建 `HttpLearningService` 并实现 `LearningService`，切换微调、教程、眼部精讲、知识库和混搭数据。
+8. 刷新页面时根据 `taskId` 和 `tutorialId` 恢复服务端状态。
+9. 添加接口错误、超时、鉴权失败和任务不存在的自动化测试。
+10. 在联调环境验证大文件上传、慢网络和解析失败恢复。
 
 ## 12. 联调验收清单
 
@@ -400,6 +507,11 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 - [ ] 妆前和妆后图片尺寸、角度完全对齐。
 - [ ] 滑动对比可以看到两张完整图片。
 - [ ] 适配页返回后直接进入视频上传页。
+- [ ] 适合、微调和混搭三条流程都能生成图示教程。
+- [ ] 眼部精讲可获取所有区域和视频切片。
+- [ ] 知识库分类、教程风格筛选和部位筛选结果与后端一致。
+- [ ] “我的”页的个人档案和偏好可从后端读取与保存。
+- [ ] 底部导航不包含跟练，应用不存在 `/practice` 路由。
 - [ ] 用户不能访问他人的任务、照片和预览结果。
 - [ ] 前端测试、构建和 lint 全部通过。
 
@@ -409,9 +521,18 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 src/App.tsx                         路由入口
 src/types/makeup.ts                前后端数据契约
 src/services/makeupService.ts      当前模拟服务及替换入口
+src/types/learning.ts              教程、知识库与混搭数据契约
+src/services/learningService.ts    学习流程模拟服务及替换入口
 src/pages/UploadPage.tsx           视频上传调用方
 src/pages/PhotoPage.tsx            照片确认与跳过逻辑
 src/pages/ParsingPage.tsx          解析进度消费方
 src/pages/PreviewPage.tsx          适配结果消费方
+src/pages/AdjustPage.tsx           微调条件提交方
+src/pages/TutorialPage.tsx         图示教程消费方
+src/pages/EyeGuidePage.tsx         眼部精讲消费方
+src/pages/LibraryPage.tsx          知识库查询与筛选方
+src/pages/MixPage.tsx              混搭选择与兼容性消费方
+src/components/MixEditor.tsx       知识库内嵌混搭编辑器
+src/pages/ProfilePage.tsx          个人档案与偏好管理页
 src/components/BeforeAfterSlider.tsx 妆前/妆后滑动组件
 ```

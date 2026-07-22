@@ -1,8 +1,9 @@
-import { ArrowLeft, Check, Clock3, SlidersHorizontal, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, Check, Clock3, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BeforeAfterSlider } from '../components/BeforeAfterSlider';
 import { MobileShell } from '../components/MobileShell';
+import { learningService } from '../services/learningService';
 import { makeupService } from '../services/makeupService';
 import type { MakeupPreview } from '../types/makeup';
 
@@ -14,7 +15,6 @@ function taskId() {
 export function PreviewPage() {
   const navigate = useNavigate();
   const [preview, setPreview] = useState<MakeupPreview | null>(null);
-  const [decision, setDecision] = useState('');
 
   useEffect(() => { void makeupService.getPreview(taskId()).then(setPreview); }, []);
 
@@ -54,11 +54,9 @@ export function PreviewPage() {
             <h2>这个妆适合你吗？</h2>
             <p>你的选择会帮助我们继续优化教程</p>
             <div className="decision-actions">
-              <button type="button" className="is-positive" onClick={() => setDecision('已记录：这套妆容适合你')}><Check size={17} />适合我</button>
-              <button type="button" onClick={() => setDecision('已记录：后续可继续微调妆容')}><SlidersHorizontal size={17} />需要微调</button>
-              <button type="button" onClick={() => setDecision('已记录：后续将提供替代方案')}><X size={17} />不适合我</button>
+              <button type="button" className="is-positive" onClick={async () => { const tutorial = await learningService.getTutorial('tutorial-rose-commute'); navigate('/tutorial', { state: { from: '/preview', tutorialId: tutorial.id } }); }}><Check size={17} />适合我</button>
+              <button type="button" onClick={() => navigate('/adjust')}><SlidersHorizontal size={17} />需要微调</button>
             </div>
-            {decision && <p className="decision-feedback" role="status">{decision}</p>}
           </section>
         </>
       ) : <div className="preview-loading"><Sparkles className="spin" size={26} /><p>正在生成你的适配效果…</p></div>}

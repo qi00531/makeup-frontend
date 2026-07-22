@@ -12,7 +12,7 @@ test('shows comparison, makeup summary and suitability decisions', async () => {
   await waitFor(() => expect(screen.getByRole('slider', { name: '妆前妆后对比位置' })).toBeInTheDocument());
   expect(screen.getByRole('button', { name: '适合我' })).toBeInTheDocument();
   expect(screen.getByRole('button', { name: '需要微调' })).toBeInTheDocument();
-  expect(screen.getByRole('button', { name: '不适合我' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: '不适合我' })).not.toBeInTheDocument();
 });
 
 test('returns directly to video upload instead of revisiting parsing', async () => {
@@ -29,5 +29,21 @@ test('returns directly to video upload instead of revisiting parsing', async () 
 
   await user.click(screen.getByRole('button', { name: '返回' }));
 
-  expect(screen.getByRole('heading', { name: '上传教程' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: '上传视频与要求' })).toBeInTheDocument();
+});
+
+test('routes suitability decisions into tutorial or adjustment', async () => {
+  const user = userEvent.setup();
+  render(
+    <MemoryRouter initialEntries={['/preview']}>
+      <Routes>
+        <Route path="/preview" element={<PreviewPage />} />
+        <Route path="/adjust" element={<h1>微调设置</h1>} />
+      </Routes>
+    </MemoryRouter>,
+  );
+
+  await user.click(await screen.findByRole('button', { name: '需要微调' }));
+
+  expect(screen.getByRole('heading', { name: '微调设置' })).toBeInTheDocument();
 });

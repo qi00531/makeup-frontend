@@ -24,6 +24,21 @@ test('keeps bottom navigation on top-level destinations', async () => {
 
   await user.click(screen.getByRole('link', { name: /知识库/ }));
 
-  expect(screen.getByRole('heading', { name: '知识库' })).toBeInTheDocument();
+  expect(screen.getByText('MY BEAUTY ARCHIVE')).toBeInTheDocument();
   expect(screen.getByRole('navigation', { name: '主导航' })).toBeInTheDocument();
+});
+
+test('uses home, library and profile as the three top-level destinations', () => {
+  render(<MemoryRouter initialEntries={['/']}><AppRoutes /></MemoryRouter>);
+
+  expect(screen.queryByRole('link', { name: /跟练/ })).not.toBeInTheDocument();
+  expect(screen.getAllByRole('link')).toHaveLength(3);
+  expect(screen.getByRole('link', { name: '我的' })).toHaveAttribute('href', '/profile');
+});
+
+test('renders the real profile page', () => {
+  render(<MemoryRouter initialEntries={['/profile']}><AppRoutes /></MemoryRouter>);
+
+  expect(screen.getByText('MY BEAUTY PROFILE')).toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: '我的' })).not.toBeInTheDocument();
 });
