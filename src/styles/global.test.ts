@@ -1,9 +1,11 @@
 import css from './global.css?raw';
 import learningCss from './learning.css?raw';
 
-test('locks the page to an iPhone 16 canvas with internal scrolling', () => {
-  expect(css).toContain('--phone-width: 393px');
-  expect(css).toContain('--phone-height: 852px');
+test('adapts the phone canvas across mobile viewport sizes with internal scrolling', () => {
+  expect(css).toContain('--phone-min-width: 320px');
+  expect(css).toContain('--phone-max-width: 440px');
+  expect(css).toMatch(/width:\s*clamp\(var\(--phone-min-width\),\s*100vw,\s*var\(--phone-max-width\)\)/);
+  expect(css).toMatch(/height:\s*100dvh/);
   expect(css).toMatch(/body\s*\{[^}]*overflow:\s*hidden/);
   expect(css).toMatch(/\.mobile-shell\s*\{[^}]*overflow-y:\s*auto/);
 });
