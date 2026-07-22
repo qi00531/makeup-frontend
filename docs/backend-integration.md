@@ -47,7 +47,7 @@ npm run lint
 | `/photo` | `src/pages/PhotoPage.tsx` | 上传本人照片或跳过 | 是 |
 | `/parsing` | `src/pages/ParsingPage.tsx` | 展示解析进度和失败信息 | 是 |
 | `/preview` | `src/pages/PreviewPage.tsx` | 展示妆前/妆后效果与适配建议 | 是 |
-| `/adjust` | `src/pages/AdjustPage.tsx` | 输入个人风格、场合、工具和自由需求 | 是 |
+| `/adjust` | `src/pages/AdjustPage.tsx` | 输入个人风格、脸部匹配和工具限制 | 是 |
 | `/tutorial` | `src/pages/TutorialPage.tsx` | 图示教程、步骤时间线与产品信息 | 是 |
 | `/eyes` | `src/pages/EyeGuidePage.tsx` | 眼部区域精讲和视频切片 | 是 |
 | `/library` | `src/pages/LibraryPage.tsx` | 教程、部位与混搭三个 TAB | 是 |
@@ -325,12 +325,16 @@ Content-Type: application/json
 
 ```json
 {
-  "style": "清透自然",
-  "occasion": "通勤",
-  "tools": ["粉底刷", "眼影刷"],
-  "notes": "希望眼妆更日常"
+  "styles": ["清透自然", "清冷高级"],
+  "occasions": ["通勤工作"],
+  "retainedParts": ["腮红", "眼妆"],
+  "skinType": "混合性肌肤",
+  "concerns": ["增加立体感", "放大眼睛"],
+  "constraints": ["没有专业刷具", "早上时间少"]
 }
 ```
+
+`styles`、`occasions`、`retainedParts`、`concerns` 和 `constraints` 均为多选数组；`skinType` 为单选字符串。前端不再提交旧版 `style`、`occasion`、`tools` 或 `notes` 字段。
 
 成功响应对应 `IllustratedTutorial`，其 `steps` 必须按 `order` 排序，每一步包含部位、产品、色值、操作说明、专业提示和对应视频时间段。
 

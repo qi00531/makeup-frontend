@@ -3,10 +3,12 @@ export type AssetCategory = 'tutorial' | 'part' | 'product';
 export type MakeupPart = 'base' | 'brows' | 'eyes' | 'blush' | 'contour' | 'highlight' | 'lips';
 
 export interface AdjustmentRequest {
-  style: string;
-  occasion: string;
-  tools: string[];
-  notes: string;
+  styles: string[];
+  occasions: string[];
+  retainedParts: string[];
+  skinType: string;
+  concerns: string[];
+  constraints: string[];
 }
 
 export interface TutorialStep {

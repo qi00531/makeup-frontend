@@ -14,10 +14,27 @@ test('submits selected adjustment and opens tutorial', async () => {
     </MemoryRouter>,
   );
 
-  await user.click(screen.getByRole('radio', { name: '更日常' }));
-  await user.click(screen.getByRole('checkbox', { name: '只有手指' }));
-  await user.type(screen.getByLabelText('补充要求'), '眼妆淡一点');
+  expect(screen.getByRole('group', { name: /个人风格/ })).toBeInTheDocument();
+  expect(screen.getByRole('group', { name: /脸部匹配/ })).toBeInTheDocument();
+  expect(screen.getByRole('group', { name: /工具/ })).toBeInTheDocument();
+  expect(screen.queryByLabelText('补充要求')).not.toBeInTheDocument();
+
+  await user.click(screen.getByRole('checkbox', { name: '清透自然' }));
+  await user.click(screen.getByRole('checkbox', { name: '清冷高级' }));
+  await user.click(screen.getByRole('checkbox', { name: '通勤工作' }));
+  await user.click(screen.getByRole('checkbox', { name: '眼妆' }));
+  await user.click(screen.getByRole('radio', { name: '敏感肌' }));
+  await user.click(screen.getByRole('checkbox', { name: '放大眼睛' }));
+  await user.click(screen.getByRole('checkbox', { name: '没有专业刷具' }));
   await user.click(screen.getByRole('button', { name: '生成方案' }));
 
   expect(screen.getByRole('heading', { name: '图示教程' })).toBeInTheDocument();
+});
+
+test('removes the previous adjustment questions', () => {
+  render(<MemoryRouter><AdjustPage /></MemoryRouter>);
+
+  expect(screen.queryByText('适配场合')).not.toBeInTheDocument();
+  expect(screen.queryByText('执行工具')).not.toBeInTheDocument();
+  expect(screen.queryByText('自由文本')).not.toBeInTheDocument();
 });

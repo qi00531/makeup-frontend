@@ -68,7 +68,7 @@ class LocalLearningService implements LearningService {
     sessionStorage.setItem('makeupAdjustment', JSON.stringify(request));
     const adjusted = copyTutorial({
       id: `tutorial-adjusted-${Date.now()}`,
-      title: `${request.style.replace(/^更/, '')}·${request.occasion}定制妆`,
+      title: `${request.styles[0] ?? '专属'}·${request.occasions[0] ?? '全场景'}定制妆`,
     });
     return rememberTutorial(adjusted);
   }

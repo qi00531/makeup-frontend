@@ -21,8 +21,17 @@ test('filters library assets by occasion and difficulty', async () => {
 });
 
 test('keeps personalized adjustment and mix results as the current tutorial', async () => {
-  const adjusted = await learningService.saveAdjustment({ style: '更冷感', occasion: '聚会', tools: [], notes: '' });
-  expect(adjusted.title).toContain('冷感');
+  const request = {
+    styles: ['清冷高级', '个性酷感'],
+    occasions: ['约会聚会'],
+    retainedParts: ['眼妆'],
+    skinType: '混合性肌肤',
+    concerns: ['放大眼睛'],
+    constraints: ['没有专业刷具'],
+  };
+  const adjusted = await learningService.saveAdjustment(request);
+  expect(adjusted.title).toContain('清冷高级');
+  expect(JSON.parse(sessionStorage.getItem('makeupAdjustment') ?? '{}')).toEqual(request);
   expect((await learningService.getTutorial()).id).toBe(adjusted.id);
 
   const mixed = await learningService.generateMix({ eyes: 'eyes-smoky', blush: 'blush-sheer' });
