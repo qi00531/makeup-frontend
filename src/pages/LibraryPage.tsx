@@ -14,8 +14,8 @@ const tabs: Array<{ id: LibraryTab; label: string; icon: typeof BookOpen }> = [
 ];
 const styles = ['全部', '清透', '甜美', '冷感', '自然'];
 const parts: Array<{ id: MakeupPart | '全部'; label: string }> = [
-  { id: '全部', label: '全部' }, { id: 'base', label: '底妆' }, { id: 'brows', label: '眉毛' }, { id: 'eyes', label: '眼妆' },
-  { id: 'blush', label: '腮红' }, { id: 'contour', label: '修容' }, { id: 'highlight', label: '高光' }, { id: 'lips', label: '唇妆' },
+  { id: '全部', label: '全部' }, { id: 'base', label: '底妆' }, { id: 'eyes', label: '眼妆' },
+  { id: 'blush', label: '腮红' }, { id: 'contour', label: '修容' }, { id: 'lips', label: '唇妆' },
 ];
 const occasions = ['全部', '日常', '通勤', '约会', '聚会'];
 const difficulties = ['全部', '新手', '进阶'];

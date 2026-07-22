@@ -12,6 +12,9 @@ test('uses a preselected asset and generates a tutorial', async () => {
   );
 
   expect(await screen.findAllByText('清透玫瑰眼妆')).toHaveLength(2);
+  expect(screen.queryByRole('button', { name: '眉毛' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: '高光' })).not.toBeInTheDocument();
+  expect(screen.getByText(/\/5$/)).toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: '生成教程' }));
 
   expect(await screen.findByRole('heading', { name: '图示教程' })).toBeInTheDocument();
