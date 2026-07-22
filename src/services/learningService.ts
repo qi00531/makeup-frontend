@@ -42,19 +42,30 @@ const assets: LibraryAsset[] = [
   { id: 'eyes-rose', title: '清透玫瑰眼妆', category: 'part', part: 'eyes', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#bd7b82', practiced: true },
   { id: 'eyes-smoky', title: '低饱和烟熏眼妆', category: 'part', part: 'eyes', source: '冷感夜幕妆', style: '冷感', occasion: '聚会', difficulty: '进阶', color: '#716363', practiced: false },
   { id: 'blush-sheer', title: '清透上移腮红', category: 'part', part: 'blush', source: '自然日常妆', style: '清透', occasion: '日常', difficulty: '新手', color: '#dd8b8a', practiced: true },
+  { id: 'blush-peach', title: '蜜桃氛围腮红', category: 'part', part: 'blush', source: '春日桃花妆', style: '甜美', occasion: '约会', difficulty: '进阶', color: '#e69a88', practiced: false },
   { id: 'lips-rose', title: '低饱和玫瑰唇', category: 'part', part: 'lips', source: '清透玫瑰通勤妆', style: '清透', occasion: '通勤', difficulty: '新手', color: '#a94f5b', practiced: false },
   { id: 'product-shadow', title: '裸粉四色眼影', category: 'product', part: 'eyes', source: '常用产品', style: '自然', occasion: '日常', difficulty: '新手', color: '#bc8584', practiced: true },
   { id: 'product-blush', title: '柔雾玫瑰腮红', category: 'product', part: 'blush', source: '常用产品', style: '甜美', occasion: '约会', difficulty: '新手', color: '#d8757f', practiced: false },
   { id: 'product-lip', title: '水光玫瑰唇釉', category: 'product', part: 'lips', source: '常用产品', style: '清透', occasion: '日常', difficulty: '新手', color: '#a84d58', practiced: true },
 ];
 
+let currentTutorial = tutorial;
+
+function copyTutorial(overrides: Partial<IllustratedTutorial>): IllustratedTutorial {
+  return { ...tutorial, ...overrides, steps: (overrides.steps ?? tutorial.steps).map((step) => ({ ...step })) };
+}
+
 class LocalLearningService implements LearningService {
   async saveAdjustment(request: AdjustmentRequest) {
     sessionStorage.setItem('makeupAdjustment', JSON.stringify(request));
-    return tutorial;
+    currentTutorial = copyTutorial({
+      id: `tutorial-adjusted-${Date.now()}`,
+      title: `${request.style.replace(/^更/, '')}·${request.occasion}定制妆`,
+    });
+    return currentTutorial;
   }
 
-  async getTutorial() { return tutorial; }
+  async getTutorial() { return currentTutorial; }
   async getEyeGuides() { return eyeGuides; }
 
   async listAssets(filter: LibraryFilter) {
@@ -62,8 +73,10 @@ class LocalLearningService implements LearningService {
     return assets.filter((asset) => {
       const matchesCategory = !filter.category || asset.category === filter.category;
       const matchesStyle = !filter.style || filter.style === '全部' || asset.style === filter.style;
+      const matchesOccasion = !filter.occasion || filter.occasion === '全部' || asset.occasion === filter.occasion;
+      const matchesDifficulty = !filter.difficulty || filter.difficulty === '全部' || asset.difficulty === filter.difficulty;
       const haystack = `${asset.title}${asset.source}${asset.style}${asset.occasion}`.toLocaleLowerCase();
-      return matchesCategory && matchesStyle && (!query || haystack.includes(query));
+      return matchesCategory && matchesStyle && matchesOccasion && matchesDifficulty && (!query || haystack.includes(query));
     });
   }
 
@@ -72,6 +85,21 @@ class LocalLearningService implements LearningService {
       return [{ type: 'style-conflict', message: '浓郁眼妆与清透腮红风格有差异', suggestion: '用于通勤时，建议缩小眼尾加深范围。' }];
     }
     return [{ type: 'compatible', message: '当前部位风格协调', suggestion: '可以直接生成这套定制教程。' }];
+  }
+
+  async generateMix(selection: MixSelection) {
+    const selected = Object.entries(selection)
+      .map(([part, id]) => ({ part, asset: assets.find((item) => item.id === id) }))
+      .filter((item) => item.asset);
+    currentTutorial = copyTutorial({
+      id: `tutorial-mix-${Date.now()}`,
+      title: '我的混搭定制妆',
+      steps: tutorial.steps.map((step) => {
+        const match = selected.find((item) => item.part === step.part)?.asset;
+        return match ? { ...step, product: match.title, color: match.color } : { ...step };
+      }),
+    });
+    return currentTutorial;
   }
 }
 

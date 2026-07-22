@@ -17,7 +17,10 @@ export function MixPage() {
   const queryAsset = params.get('asset');
   const [activePart, setActivePart] = useState<MakeupPart>(queryPart ?? 'eyes');
   const [assets, setAssets] = useState<LibraryAsset[]>([]);
-  const [selection, setSelection] = useState<MixSelection>({ eyes: queryPart === 'eyes' && queryAsset ? queryAsset : 'eyes-rose', blush: 'blush-sheer', lips: 'lips-rose' });
+  const [selection, setSelection] = useState<MixSelection>(() => ({
+    eyes: 'eyes-rose', blush: 'blush-sheer', lips: 'lips-rose',
+    ...(queryPart && queryAsset ? { [queryPart]: queryAsset } : {}),
+  }));
   const [hints, setHints] = useState<CompatibilityHint[]>([]);
 
   useEffect(() => { void learningService.listAssets({ category: 'part' }).then(setAssets); }, []);
@@ -32,7 +35,7 @@ export function MixPage() {
       <section className="part-options"><div className="section-heading"><h2>{partLabels[activePart]}资产</h2><span>选择一个</span></div><div className="option-scroll">{activeOptions.length ? activeOptions.map((asset) => <button type="button" key={asset.id} className={selection[activePart] === asset.id ? 'is-active' : ''} onClick={() => setSelection((current) => ({ ...current, [activePart]: asset.id }))}><i style={{ backgroundColor: asset.color }} /> <span><strong>{asset.title}</strong><small>{asset.style} · {asset.source}</small></span>{selection[activePart] === asset.id && <Check size={14} />}</button>) : <button type="button" className="is-active"><i className="neutral-swatch"/><span><strong>{presetNames[activePart] ?? `默认${partLabels[activePart]}`}</strong><small>当前预置方案</small></span><Check size={14} /></button>}</div></section>
       <section className="selected-assets"><div className="section-heading"><h2>已选资产</h2><span>{selectedAssets.length} 项</span></div>{selectedAssets.map(({ part, asset }) => asset && <button type="button" key={part} onClick={() => setActivePart(part)}><span>{partLabels[part]}</span><i style={{ backgroundColor: asset.color }} /><strong>{asset.title}</strong><ChevronRight size={14} /></button>)}</section>
       <section className={`compatibility-card ${hints[0]?.type === 'compatible' ? 'is-compatible' : 'has-warning'}`}>{hints[0]?.type === 'compatible' ? <Check size={17} /> : <CircleAlert size={17} />}<div><strong>{hints[0]?.message}</strong><p>{hints[0]?.suggestion}</p></div></section>
-      <button className="primary-button mix-generate" type="button" onClick={() => navigate('/tutorial')}><WandSparkles size={18} />生成教程</button>
+      <button className="primary-button mix-generate" type="button" onClick={async () => { await learningService.generateMix(selection); navigate('/tutorial', { state: { from: '/mix' } }); }}><WandSparkles size={18} />生成教程</button>
       <BottomNav />
     </MobileShell>
   );

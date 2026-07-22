@@ -1,6 +1,6 @@
 import { ArrowLeft, BookOpenCheck, Check, ChevronRight, Clock3, Eye, Film, Layers3, PackageOpen, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaceLayers } from '../components/FaceLayers';
 import { MobileShell } from '../components/MobileShell';
 import { learningService } from '../services/learningService';
@@ -8,6 +8,8 @@ import type { IllustratedTutorial, TutorialMode } from '../types/learning';
 
 export function TutorialPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = (location.state as { from?: string } | null)?.from ?? '/preview';
   const [tutorial, setTutorial] = useState<IllustratedTutorial | null>(null);
   const [stepIndex, setStepIndex] = useState(0);
   const [mode, setMode] = useState<TutorialMode>('beginner');
@@ -19,7 +21,7 @@ export function TutorialPage() {
   return (
     <MobileShell className="learning-page tutorial-page">
       <header className="detail-header">
-        <button className="icon-button" type="button" aria-label="返回" onClick={() => navigate('/preview')}><ArrowLeft size={21} /></button>
+        <button className="icon-button" type="button" aria-label="返回" onClick={() => navigate(returnTo)}><ArrowLeft size={21} /></button>
         <div><span className="page-kicker">ILLUSTRATED GUIDE</span><h1>图示教程</h1></div>
         <button className="icon-button" type="button" aria-label="保存教程"><BookOpenCheck size={20} /></button>
       </header>

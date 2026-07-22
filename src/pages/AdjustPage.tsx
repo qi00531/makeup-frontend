@@ -1,5 +1,6 @@
 import { ArrowLeft, BriefcaseBusiness, Check, ChevronRight, Hand, Palette, Sparkles, WandSparkles } from 'lucide-react';
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
+import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNav } from '../components/BottomNav';
 import { MobileShell } from '../components/MobileShell';
@@ -25,7 +26,7 @@ export function AdjustPage() {
     event.preventDefault();
     setSubmitting(true);
     await learningService.saveAdjustment({ style, occasion, tools: selectedTools, notes });
-    navigate('/tutorial');
+    navigate('/tutorial', { state: { from: '/adjust' } });
   }
 
   return (

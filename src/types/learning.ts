@@ -57,6 +57,8 @@ export interface LibraryFilter {
   query?: string;
   category?: AssetCategory;
   style?: string;
+  occasion?: string;
+  difficulty?: string;
 }
 
 export type MixSelection = Partial<Record<MakeupPart, string>>;
@@ -73,4 +75,5 @@ export interface LearningService {
   getEyeGuides(): Promise<EyeRegionGuide[]>;
   listAssets(filter: LibraryFilter): Promise<LibraryAsset[]>;
   checkCompatibility(selection: MixSelection): Promise<CompatibilityHint[]>;
+  generateMix(selection: MixSelection): Promise<IllustratedTutorial>;
 }
