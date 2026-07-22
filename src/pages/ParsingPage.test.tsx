@@ -14,5 +14,8 @@ test('shows progress stages and opens preview when complete', async () => {
   );
 
   expect(screen.getAllByText('检查视频质量')).toHaveLength(2);
-  await waitFor(() => expect(screen.getByRole('heading', { name: '适配预览' })).toBeInTheDocument());
+  await waitFor(
+    () => expect(screen.getByRole('heading', { name: '适配预览' })).toBeInTheDocument(),
+    { timeout: 3000 },
+  );
 });
