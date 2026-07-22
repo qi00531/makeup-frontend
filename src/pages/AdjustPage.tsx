@@ -25,8 +25,8 @@ export function AdjustPage() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     setSubmitting(true);
-    await learningService.saveAdjustment({ style, occasion, tools: selectedTools, notes });
-    navigate('/tutorial', { state: { from: '/adjust' } });
+    const tutorial = await learningService.saveAdjustment({ style, occasion, tools: selectedTools, notes });
+    navigate('/tutorial', { state: { from: '/adjust', tutorialId: tutorial.id } });
   }
 
   return (

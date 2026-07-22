@@ -29,3 +29,10 @@ test('keeps personalized adjustment and mix results as the current tutorial', as
   expect(mixed.steps.find((step) => step.part === 'eyes')?.product).toBe('低饱和烟熏眼妆');
   expect((await learningService.getTutorial()).id).toBe(mixed.id);
 });
+
+test('selects tutorials by id so the default flow cannot reuse stale personalization', async () => {
+  const mixed = await learningService.generateMix({ blush: 'blush-peach' });
+
+  expect((await learningService.getTutorial(mixed.id)).id).toBe(mixed.id);
+  expect((await learningService.getTutorial('tutorial-rose-commute')).title).toBe('清透玫瑰通勤妆');
+});

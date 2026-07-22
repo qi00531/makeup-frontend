@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BeforeAfterSlider } from '../components/BeforeAfterSlider';
 import { MobileShell } from '../components/MobileShell';
+import { learningService } from '../services/learningService';
 import { makeupService } from '../services/makeupService';
 import type { MakeupPreview } from '../types/makeup';
 
@@ -53,7 +54,7 @@ export function PreviewPage() {
             <h2>这个妆适合你吗？</h2>
             <p>你的选择会帮助我们继续优化教程</p>
             <div className="decision-actions">
-              <button type="button" className="is-positive" onClick={() => navigate('/tutorial')}><Check size={17} />适合我</button>
+              <button type="button" className="is-positive" onClick={async () => { const tutorial = await learningService.getTutorial('tutorial-rose-commute'); navigate('/tutorial', { state: { from: '/preview', tutorialId: tutorial.id } }); }}><Check size={17} />适合我</button>
               <button type="button" onClick={() => navigate('/adjust')}><SlidersHorizontal size={17} />需要微调</button>
               <button type="button" onClick={() => navigate('/adjust')}><X size={17} />不适合我</button>
             </div>

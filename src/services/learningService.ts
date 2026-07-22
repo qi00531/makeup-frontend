@@ -49,23 +49,40 @@ const assets: LibraryAsset[] = [
   { id: 'product-lip', title: '水光玫瑰唇釉', category: 'product', part: 'lips', source: '常用产品', style: '清透', occasion: '日常', difficulty: '新手', color: '#a84d58', practiced: true },
 ];
 
-let currentTutorial = tutorial;
+const tutorials = new Map<string, IllustratedTutorial>([[tutorial.id, tutorial]]);
+let currentTutorialId = tutorial.id;
 
 function copyTutorial(overrides: Partial<IllustratedTutorial>): IllustratedTutorial {
   return { ...tutorial, ...overrides, steps: (overrides.steps ?? tutorial.steps).map((step) => ({ ...step })) };
 }
 
+function rememberTutorial(next: IllustratedTutorial) {
+  tutorials.set(next.id, next);
+  currentTutorialId = next.id;
+  sessionStorage.setItem('makeupTutorial', JSON.stringify(next));
+  return next;
+}
+
 class LocalLearningService implements LearningService {
   async saveAdjustment(request: AdjustmentRequest) {
     sessionStorage.setItem('makeupAdjustment', JSON.stringify(request));
-    currentTutorial = copyTutorial({
+    const adjusted = copyTutorial({
       id: `tutorial-adjusted-${Date.now()}`,
       title: `${request.style.replace(/^更/, '')}·${request.occasion}定制妆`,
     });
-    return currentTutorial;
+    return rememberTutorial(adjusted);
   }
 
-  async getTutorial() { return currentTutorial; }
+  async getTutorial(tutorialId?: string) {
+    const requestedId = tutorialId ?? currentTutorialId;
+    const known = tutorials.get(requestedId);
+    if (known) return rememberTutorial(known);
+    try {
+      const stored = JSON.parse(sessionStorage.getItem('makeupTutorial') ?? 'null') as IllustratedTutorial | null;
+      if (stored?.id === requestedId) return rememberTutorial(stored);
+    } catch { /* Ignore invalid browser state and fall back to the base tutorial. */ }
+    return rememberTutorial(tutorial);
+  }
   async getEyeGuides() { return eyeGuides; }
 
   async listAssets(filter: LibraryFilter) {
@@ -91,7 +108,7 @@ class LocalLearningService implements LearningService {
     const selected = Object.entries(selection)
       .map(([part, id]) => ({ part, asset: assets.find((item) => item.id === id) }))
       .filter((item) => item.asset);
-    currentTutorial = copyTutorial({
+    const mixed = copyTutorial({
       id: `tutorial-mix-${Date.now()}`,
       title: '我的混搭定制妆',
       steps: tutorial.steps.map((step) => {
@@ -99,7 +116,7 @@ class LocalLearningService implements LearningService {
         return match ? { ...step, product: match.title, color: match.color } : { ...step };
       }),
     });
-    return currentTutorial;
+    return rememberTutorial(mixed);
   }
 }
 

@@ -71,8 +71,8 @@ export interface CompatibilityHint {
 
 export interface LearningService {
   saveAdjustment(request: AdjustmentRequest): Promise<IllustratedTutorial>;
-  getTutorial(): Promise<IllustratedTutorial>;
-  getEyeGuides(): Promise<EyeRegionGuide[]>;
+  getTutorial(tutorialId?: string): Promise<IllustratedTutorial>;
+  getEyeGuides(tutorialId?: string): Promise<EyeRegionGuide[]>;
   listAssets(filter: LibraryFilter): Promise<LibraryAsset[]>;
   checkCompatibility(selection: MixSelection): Promise<CompatibilityHint[]>;
   generateMix(selection: MixSelection): Promise<IllustratedTutorial>;
