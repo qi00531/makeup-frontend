@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { LibraryPage } from './LibraryPage';
@@ -14,8 +14,11 @@ test('filters assets and sends a selected part to mix editor', async () => {
     </MemoryRouter>,
   );
 
+  expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+  const tabRow = screen.getByRole('group', { name: '知识库分类与筛选' });
+  expect(within(tabRow).getByRole('tab', { name: '教程' })).toBeInTheDocument();
+  expect(within(tabRow).getByRole('button', { name: '筛选' })).toBeInTheDocument();
   await user.click(await screen.findByRole('tab', { name: '部位' }));
-  await user.type(screen.getByRole('searchbox'), '眼妆');
   await user.click(await screen.findByRole('button', { name: /清透玫瑰眼妆/ }));
 
   expect(screen.getByRole('heading', { name: '混搭编辑' })).toBeInTheDocument();
@@ -30,4 +33,5 @@ test('replaces the product tab with the embedded mix editor', async () => {
   await user.click(screen.getByRole('tab', { name: '混搭' }));
 
   expect(screen.getByRole('heading', { name: '混搭编辑' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: '筛选' })).not.toBeInTheDocument();
 });
