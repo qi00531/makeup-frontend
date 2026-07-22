@@ -89,11 +89,12 @@ class LocalLearningService implements LearningService {
     const query = filter.query?.trim().toLocaleLowerCase() ?? '';
     return assets.filter((asset) => {
       const matchesCategory = !filter.category || asset.category === filter.category;
+      const matchesPart = !filter.part || asset.part === filter.part;
       const matchesStyle = !filter.style || filter.style === '全部' || asset.style === filter.style;
       const matchesOccasion = !filter.occasion || filter.occasion === '全部' || asset.occasion === filter.occasion;
       const matchesDifficulty = !filter.difficulty || filter.difficulty === '全部' || asset.difficulty === filter.difficulty;
       const haystack = `${asset.title}${asset.source}${asset.style}${asset.occasion}`.toLocaleLowerCase();
-      return matchesCategory && matchesStyle && matchesOccasion && matchesDifficulty && (!query || haystack.includes(query));
+      return matchesCategory && matchesPart && matchesStyle && matchesOccasion && matchesDifficulty && (!query || haystack.includes(query));
     });
   }
 

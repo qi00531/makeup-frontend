@@ -20,6 +20,13 @@ test('filters library assets by occasion and difficulty', async () => {
   expect(assets.every((asset) => asset.occasion === '通勤' && asset.difficulty === '新手')).toBe(true);
 });
 
+test('filters part assets by makeup part', async () => {
+  const assets = await learningService.listAssets({ category: 'part', part: 'eyes' });
+
+  expect(assets.length).toBeGreaterThan(0);
+  expect(assets.every((asset) => asset.category === 'part' && asset.part === 'eyes')).toBe(true);
+});
+
 test('keeps personalized adjustment and mix results as the current tutorial', async () => {
   const request = {
     styles: ['清冷高级', '个性酷感'],

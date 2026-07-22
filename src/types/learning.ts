@@ -58,6 +58,7 @@ export interface LibraryAsset {
 export interface LibraryFilter {
   query?: string;
   category?: AssetCategory;
+  part?: MakeupPart;
   style?: string;
   occasion?: string;
   difficulty?: string;

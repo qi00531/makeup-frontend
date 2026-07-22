@@ -350,7 +350,7 @@ GET /api/v1/makeup/tutorials/{tutorialId}/eye-guides
 ### 6.8 查询知识库素材
 
 ```http
-GET /api/v1/makeup/library/assets?query=玫瑰&category=part&style=清透
+GET /api/v1/makeup/library/assets?category=part&part=eyes
 ```
 
 返回 `LibraryAsset[]`。`category` 只允许 `tutorial`、`part`、`product`；`part` 只允许 `base`、`brows`、`eyes`、`blush`、`contour`、`highlight`、`lips`。
@@ -488,7 +488,7 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 - [ ] 适配页返回后直接进入视频上传页。
 - [ ] 适合、微调和混搭三条流程都能生成图示教程。
 - [ ] 眼部精讲可获取所有区域和视频切片。
-- [ ] 知识库搜索、分类和风格筛选结果与后端一致。
+- [ ] 知识库分类、教程风格筛选和部位筛选结果与后端一致。
 - [ ] “我的”页的个人档案和偏好可从后端读取与保存。
 - [ ] 底部导航不包含跟练，应用不存在 `/practice` 路由。
 - [ ] 用户不能访问他人的任务、照片和预览结果。
