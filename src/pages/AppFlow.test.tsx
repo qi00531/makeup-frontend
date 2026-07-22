@@ -27,3 +27,10 @@ test('keeps bottom navigation on top-level destinations', async () => {
   expect(screen.getByRole('heading', { name: '知识库' })).toBeInTheDocument();
   expect(screen.getByRole('navigation', { name: '主导航' })).toBeInTheDocument();
 });
+
+test('uses home, library, mix and profile as top-level navigation', () => {
+  render(<MemoryRouter initialEntries={['/']}><AppRoutes /></MemoryRouter>);
+
+  expect(screen.queryByRole('link', { name: /跟练/ })).not.toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /混搭/ })).toHaveAttribute('href', '/mix');
+});
