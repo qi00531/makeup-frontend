@@ -39,13 +39,8 @@ export function UploadPage() {
 
   return (
     <MobileShell withNav className="upload-page">
-      <header className="page-heading">
-        <span className="page-kicker">MAKEUP PRACTICE</span>
-        <h1>上传教程</h1>
-        <p>把喜欢的美妆视频，变成适合你的跟练步骤</p>
-      </header>
-
-      <section className={`upload-card${file ? ' has-file' : ''}`} aria-labelledby="upload-title">
+      <section className="upload-suite" aria-label="上传视频与要求">
+      <div className={`upload-card${file ? ' has-file' : ''}`}>
         <input
           id="video-upload"
           className="visually-hidden"
@@ -63,10 +58,9 @@ export function UploadPage() {
           <span className="upload-card__meta">{file ? `${formatSize(file.size)} · 点击重新选择` : '支持 MP4、MOV · 不超过 500MB'}</span>
         </label>
         {file && <Check className="upload-card__check" aria-hidden="true" size={19} />}
-      </section>
+      </div>
       {error && <p className="inline-error" role="alert">{error}</p>}
-
-      <section className="requirement-card" aria-labelledby="requirements-title">
+      <div className="requirement-card" aria-labelledby="requirements-title">
         <div className="section-title-row">
           <span className="section-icon"><Sparkles size={18} /></span>
           <div><span className="section-eyebrow">上传前看一眼</span><h2 id="requirements-title">视频要求</h2></div>
@@ -76,6 +70,7 @@ export function UploadPage() {
           <li><Check size={15} />人脸清晰无遮挡</li>
           <li><Check size={15} />光线充足稳定</li>
         </ul>
+      </div>
       </section>
 
       {file && (

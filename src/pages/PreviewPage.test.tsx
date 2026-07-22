@@ -29,7 +29,7 @@ test('returns directly to video upload instead of revisiting parsing', async () 
 
   await user.click(screen.getByRole('button', { name: '返回' }));
 
-  expect(screen.getByRole('heading', { name: '上传教程' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: '上传视频与要求' })).toBeInTheDocument();
 });
 
 test('routes suitability decisions into tutorial or adjustment', async () => {

@@ -8,6 +8,7 @@ test('adapts the phone canvas across mobile viewport sizes with internal scrolli
   expect(css).toMatch(/height:\s*100dvh/);
   expect(css).toMatch(/body\s*\{[^}]*overflow:\s*hidden/);
   expect(css).toMatch(/\.mobile-shell\s*\{[^}]*overflow-y:\s*auto/);
+  expect(css).toMatch(/\.bottom-nav\s*\{[^}]*position:\s*fixed/);
 });
 
 test('uses the provided bitmap assets as page backgrounds', () => {

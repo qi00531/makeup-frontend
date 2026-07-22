@@ -50,9 +50,9 @@ npm run lint
 | `/adjust` | `src/pages/AdjustPage.tsx` | 输入个人风格、场合、工具和自由需求 | 是 |
 | `/tutorial` | `src/pages/TutorialPage.tsx` | 图示教程、步骤时间线与产品信息 | 是 |
 | `/eyes` | `src/pages/EyeGuidePage.tsx` | 眼部区域精讲和视频切片 | 是 |
-| `/library` | `src/pages/LibraryPage.tsx` | 搜索、筛选教程和部位素材 | 是 |
-| `/mix` | `src/pages/MixPage.tsx` | 组合部位素材并生成定制教程 | 是 |
-| `/profile` | 路由兼容转发 | 旧的“我的”地址，自动转到 `/library` | 否 |
+| `/library` | `src/pages/LibraryPage.tsx` | 教程、部位与混搭三个 TAB | 是 |
+| `/mix` | `src/pages/MixPage.tsx` | 旧地址，兼容转到 `/library?tab=mix` | 否 |
+| `/profile` | `src/pages/ProfilePage.tsx` | 个人档案、学习数据、偏好和隐私入口 | 是 |
 
 核心流程：
 
@@ -67,10 +67,10 @@ npm run lint
 ```text
 适合我：/preview → /tutorial → /eyes
 需要微调：/preview → /adjust → /tutorial → /eyes
-素材混搭：/library → /mix → /tutorial
+素材混搭：/library?tab=mix → /tutorial
 ```
 
-底部导航固定为“首页 / 知识库 / 混搭”。“我的”能力已并入知识库，旧 `/profile` 地址会兼容跳转到 `/library`。本版本明确不包含跟练页和 `/practice` 路由。
+底部导航固定为“首页 / 知识库 / 我的”。混搭编辑已迁入知识库第三个 TAB，旧 `/mix` 地址会保留部位和素材查询参数后转发。底部导航使用固定定位，不随手机内容滚动。本版本明确不包含跟练页和 `/practice` 路由。
 
 ## 4. 前端代码边界
 
@@ -485,6 +485,7 @@ const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 - [ ] 适合、微调和混搭三条流程都能生成图示教程。
 - [ ] 眼部精讲可获取所有区域和视频切片。
 - [ ] 知识库搜索、分类和风格筛选结果与后端一致。
+- [ ] “我的”页的个人档案和偏好可从后端读取与保存。
 - [ ] 底部导航不包含跟练，应用不存在 `/practice` 路由。
 - [ ] 用户不能访问他人的任务、照片和预览结果。
 - [ ] 前端测试、构建和 lint 全部通过。
@@ -506,5 +507,7 @@ src/pages/TutorialPage.tsx         图示教程消费方
 src/pages/EyeGuidePage.tsx         眼部精讲消费方
 src/pages/LibraryPage.tsx          知识库查询与筛选方
 src/pages/MixPage.tsx              混搭选择与兼容性消费方
+src/components/MixEditor.tsx       知识库内嵌混搭编辑器
+src/pages/ProfilePage.tsx          个人档案与偏好管理页
 src/components/BeforeAfterSlider.tsx 妆前/妆后滑动组件
 ```

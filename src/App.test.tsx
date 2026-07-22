@@ -9,5 +9,5 @@ test('renders the upload screen at the root route', () => {
     </MemoryRouter>,
   );
 
-  expect(screen.getByRole('heading', { name: '上传教程' })).toBeInTheDocument();
+  expect(screen.getByRole('region', { name: '上传视频与要求' })).toBeInTheDocument();
 });

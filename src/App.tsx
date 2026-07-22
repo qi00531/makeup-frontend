@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { PhotoPage } from './pages/PhotoPage';
 import { ParsingPage } from './pages/ParsingPage';
 import { PreviewPage } from './pages/PreviewPage';
@@ -7,6 +7,7 @@ import { AdjustPage } from './pages/AdjustPage';
 import { EyeGuidePage } from './pages/EyeGuidePage';
 import { LibraryPage } from './pages/LibraryPage';
 import { MixPage } from './pages/MixPage';
+import { ProfilePage } from './pages/ProfilePage';
 import { TutorialPage } from './pages/TutorialPage';
 
 export function AppRoutes() {
@@ -21,7 +22,7 @@ export function AppRoutes() {
       <Route path="/eyes" element={<EyeGuidePage />} />
       <Route path="/library" element={<LibraryPage />} />
       <Route path="/mix" element={<MixPage />} />
-      <Route path="/profile" element={<Navigate to="/library" replace />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   );
 }
