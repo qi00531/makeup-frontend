@@ -39,5 +39,6 @@ test('uses home, library and profile as the three top-level destinations', () =>
 test('renders the real profile page', () => {
   render(<MemoryRouter initialEntries={['/profile']}><AppRoutes /></MemoryRouter>);
 
-  expect(screen.getByRole('heading', { name: '我的' })).toBeInTheDocument();
+  expect(screen.getByText('MY BEAUTY PROFILE')).toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: '我的' })).not.toBeInTheDocument();
 });

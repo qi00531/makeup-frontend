@@ -32,6 +32,7 @@ h1, h2, h3, p { margin-top: 0; }
 .mobile-shell { position: relative; width: clamp(var(--phone-min-width), 100vw, var(--phone-max-width)); height: 100dvh; min-height: 0; padding: max(22px, env(safe-area-inset-top)) clamp(15px, 5vw, 22px) max(30px, env(safe-area-inset-bottom)); overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; background: var(--canvas); }
 .mobile-shell::-webkit-scrollbar { display: none; }
 .upload-page { background-image: linear-gradient(180deg, rgba(250,247,244,.02) 0, rgba(250,247,244,.08) 42%, rgba(250,247,244,.74) 61%, rgba(250,247,244,.94) 100%), url('../assets/bg-home-collage.png'); background-position: top center; background-size: 100% auto; }
+.upload-heading { padding: 6px 2px 2px; }
 .photo-page { background-image: linear-gradient(180deg, rgba(250,247,244,.18), rgba(250,247,244,.9) 58%), url('../assets/bg-photo-flower.png'); background-position: top center; background-size: 100% auto; }
 .parsing-page { background-image: linear-gradient(180deg, rgba(250,247,244,.42), rgba(250,247,244,.9)), url('../assets/bg-analysis-lilies.png'); background-position: top center; background-size: 100% auto; }
 .preview-page { background-image: linear-gradient(180deg, rgba(250,247,244,.34), rgba(250,247,244,.9) 50%), url('../assets/bg-custom-paper.png'); background-position: top center; background-size: 100% auto; }

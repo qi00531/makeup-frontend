@@ -23,6 +23,7 @@ test('shows selected video and enables continue', async () => {
 test('combines upload and requirements without the top title card', () => {
   render(<MemoryRouter><UploadPage /></MemoryRouter>);
 
+  expect(screen.getByText('MY BEAUTY STUDIO')).toBeInTheDocument();
   expect(screen.queryByRole('heading', { name: '上传教程' })).not.toBeInTheDocument();
   const card = screen.getByRole('region', { name: '上传视频与要求' });
   expect(within(card).getByLabelText('选择教程视频')).toBeInTheDocument();

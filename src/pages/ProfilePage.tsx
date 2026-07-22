@@ -21,7 +21,7 @@ export function ProfilePage() {
 
   return (
     <MobileShell withNav className="learning-page profile-page">
-      <header className="profile-heading"><span className="page-kicker">MY BEAUTY PROFILE</span><h1>我的</h1></header>
+      <header className="profile-heading"><span className="page-kicker">MY BEAUTY PROFILE</span></header>
       <section className="profile-hero"><span className="profile-avatar"><UserRound size={29} /></span><div><h2>美妆学习者</h2><p>清透妆容·新手进阶中</p></div><button type="button" aria-label="编辑个人资料"><ChevronRight size={18} /></button></section>
       <section className="profile-stats" aria-label="学习数据"><div><strong>12</strong><span>收藏教程</span></div><div><strong>28</strong><span>完成步骤</span></div><div><strong>6</strong><span>定制方案</span></div></section>
       <section className="profile-panel"><div className="section-heading"><h2>妆容档案</h2><span><Sparkles size={13} />已同步</span></div><div className="profile-tags"><span>混合肌</span><span>暖中性肤色</span><span>内双眼型</span></div></section>

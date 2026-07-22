@@ -39,6 +39,7 @@ export function UploadPage() {
 
   return (
     <MobileShell withNav className="upload-page">
+      <header className="upload-heading"><span className="page-kicker">MY BEAUTY STUDIO</span></header>
       <section className="upload-suite" aria-label="上传视频与要求">
       <div className={`upload-card${file ? ' has-file' : ''}`}>
         <input

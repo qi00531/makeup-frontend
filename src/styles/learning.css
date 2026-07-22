@@ -1,5 +1,6 @@
 .learning-page { background-image: linear-gradient(180deg, rgba(250,247,244,.58), rgba(250,247,244,.94) 48%), url('../assets/bg-custom-paper.png'); background-position: top center; background-size: 100% auto; }
 .library-page { background-image: linear-gradient(180deg, rgba(250,247,244,.22), rgba(250,247,244,.9) 47%), url('../assets/bg-library-flower.png'); }
+.profile-page { background-image: linear-gradient(180deg, rgba(250,247,244,.22), rgba(250,247,244,.9) 47%), url('../assets/bg-profile-flower.png'); }
 .learning-page h2 { margin: 0; font-size: 14px; }
 .adjust-intro { display: flex; padding: 12px 13px; align-items: flex-start; gap: 9px; color: #795b57; border: 1px solid rgba(219,171,168,.48); border-radius: 13px; background: rgba(250,235,232,.88); }
 .adjust-intro svg { margin-top: 2px; flex: 0 0 auto; color: var(--rose); }.adjust-intro p { margin: 0; font-size: 10px; line-height: 1.65; }

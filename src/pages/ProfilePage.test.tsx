@@ -7,7 +7,8 @@ test('edits and persists personal makeup preferences', async () => {
   const user = userEvent.setup();
   render(<MemoryRouter><ProfilePage /></MemoryRouter>);
 
-  expect(screen.getByRole('heading', { name: '我的' })).toBeInTheDocument();
+  expect(screen.getByText('MY BEAUTY PROFILE')).toBeInTheDocument();
+  expect(screen.queryByRole('heading', { name: '我的' })).not.toBeInTheDocument();
   await user.click(screen.getByRole('button', { name: '偏好风格 清透自然' }));
   await user.click(screen.getByRole('option', { name: '冷感高级' }));
 
