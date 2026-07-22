@@ -16,13 +16,11 @@ test('moves from preview through adjustment to tutorial and eye guide', async ()
   expect(screen.queryByRole('link', { name: /跟练/ })).not.toBeInTheDocument();
 });
 
-test('resolves every mix part before loading a preset preview and tutorial', async () => {
+test('loads a preset preview and tutorial with untouched parts skipped', async () => {
   const user = userEvent.setup();
   render(<MemoryRouter initialEntries={['/library?tab=mix']}><AppRoutes /></MemoryRouter>);
 
-  const skipButtons = await screen.findAllByRole('button', { name: '跳过此部位' });
-  expect(screen.getByRole('button', { name: '生成效果' })).toBeDisabled();
-  for (const button of skipButtons) await user.click(button);
+  expect(screen.getByRole('button', { name: '生成效果' })).toBeEnabled();
   await user.click(screen.getByRole('button', { name: '生成效果' }));
 
   expect(await screen.findByRole('heading', { name: '生成妆效中' })).toBeInTheDocument();

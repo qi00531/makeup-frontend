@@ -49,7 +49,8 @@ test('replaces the product tab with the embedded mix editor', async () => {
   await user.click(screen.getByRole('tab', { name: '混搭' }));
 
   expect(screen.getByRole('region', { name: '混搭编辑' })).toBeInTheDocument();
-  expect(screen.getByText('已完成 0/5')).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: '展开底妆选项' })).toHaveAttribute('aria-expanded', 'false');
+  expect(screen.getByRole('button', { name: '生成效果' })).toBeEnabled();
   expect(screen.queryByRole('img', { name: '混搭妆容预览' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '筛选' })).not.toBeInTheDocument();
 });
