@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, Clock3, SlidersHorizontal, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, Check, Clock3, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BeforeAfterSlider } from '../components/BeforeAfterSlider';
@@ -56,7 +56,6 @@ export function PreviewPage() {
             <div className="decision-actions">
               <button type="button" className="is-positive" onClick={async () => { const tutorial = await learningService.getTutorial('tutorial-rose-commute'); navigate('/tutorial', { state: { from: '/preview', tutorialId: tutorial.id } }); }}><Check size={17} />适合我</button>
               <button type="button" onClick={() => navigate('/adjust')}><SlidersHorizontal size={17} />需要微调</button>
-              <button type="button" onClick={() => navigate('/adjust')}><X size={17} />不适合我</button>
             </div>
           </section>
         </>
