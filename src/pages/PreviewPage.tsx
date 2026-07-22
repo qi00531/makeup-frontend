@@ -21,7 +21,7 @@ export function PreviewPage() {
   return (
     <MobileShell className="preview-page">
       <header className="detail-header">
-        <button className="icon-button" type="button" aria-label="返回" onClick={() => navigate(-1)}><ArrowLeft size={21} /></button>
+        <button className="icon-button" type="button" aria-label="返回" onClick={() => navigate('/', { replace: true })}><ArrowLeft size={21} /></button>
         <div><span className="page-kicker">YOUR MAKEUP MATCH</span><h1>适配预览</h1></div>
         <span className="header-spacer" />
       </header>
