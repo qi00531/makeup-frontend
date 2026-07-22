@@ -18,3 +18,8 @@ test('uses the provided bitmap assets as page backgrounds', () => {
   expect(css).toContain("url('../assets/bg-custom-paper.png')");
   expect(learningCss).toContain("url('../assets/bg-library-flower.png')");
 });
+
+test('keeps the library tabs compact beside the filter button', () => {
+  expect(learningCss).toMatch(/\.library-tab-row\s*\{[^}]*grid-template-columns:\s*minmax\(0,280px\)\s+44px/);
+  expect(learningCss).toMatch(/\.library-tab-row\s*\{[^}]*justify-content:\s*space-between/);
+});

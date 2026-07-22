@@ -34,6 +34,12 @@ test('submits selected adjustment and opens tutorial', async () => {
 test('removes the previous adjustment questions', () => {
   render(<MemoryRouter><AdjustPage /></MemoryRouter>);
 
+  expect(screen.getByText('个人风格').closest('fieldset')).toBeInTheDocument();
+  expect(screen.getByText('脸部匹配').closest('fieldset')).toBeInTheDocument();
+  expect(screen.getByText('工具').closest('fieldset')).toBeInTheDocument();
+  expect(screen.queryByText('选择妆容方向与使用场景')).not.toBeInTheDocument();
+  expect(screen.queryByText('结合肤质与修饰目标调整步骤')).not.toBeInTheDocument();
+  expect(screen.queryByText('我们会据此简化工具与步骤')).not.toBeInTheDocument();
   expect(screen.queryByText('适配场合')).not.toBeInTheDocument();
   expect(screen.queryByText('执行工具')).not.toBeInTheDocument();
   expect(screen.queryByText('自由文本')).not.toBeInTheDocument();

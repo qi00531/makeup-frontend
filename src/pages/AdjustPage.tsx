@@ -51,18 +51,18 @@ export function AdjustPage() {
       <div className="adjust-intro"><WandSparkles size={19} /><p>告诉我们你想怎么调整，我们会改写范围、颜色、位置、工具和顺序。</p></div>
 
       <form className="adjust-form" onSubmit={submit}>
-        <fieldset className="choice-section"><legend><Palette size={17} /><span><strong>个人风格</strong><small>选择妆容方向与使用场景</small></span></legend>
+        <fieldset className="choice-section" aria-labelledby="personal-style-title"><div className="choice-section__heading"><Palette size={17} /><h2 id="personal-style-title">个人风格</h2></div>
           <div className="choice-question"><h3>你希望这个妆容更偏向哪种风格？</h3><small>多选</small><MultiChoice name="styles" options={styleOptions} selected={styles} onChange={setStyles} /></div>
           <div className="choice-question"><h3>这个妆主要使用在哪些场景？</h3><small>多选</small><MultiChoice name="occasions" options={occasionOptions} selected={occasions} onChange={setOccasions} /></div>
         </fieldset>
 
-        <fieldset className="choice-section"><legend><ScanFace size={17} /><span><strong>脸部匹配</strong><small>结合肤质与修饰目标调整步骤</small></span></legend>
+        <fieldset className="choice-section" aria-labelledby="face-match-title"><div className="choice-section__heading"><ScanFace size={17} /><h2 id="face-match-title">脸部匹配</h2></div>
           <div className="choice-question"><h3>你希望保留原教程的哪些部分？</h3><small>多选</small><MultiChoice name="retainedParts" options={retainedPartOptions} selected={retainedParts} onChange={setRetainedParts} /></div>
           <div className="choice-question"><h3>你的肤质更接近哪种？</h3><small>单选</small><div className="choice-grid">{skinTypeOptions.map((item) => <label className={`choice-chip${skinType === item ? ' is-selected' : ''}`} key={item}><input type="radio" name="skinType" value={item} checked={skinType === item} onChange={() => setSkinType(item)} /><span>{item}</span>{skinType === item && <Check size={13} />}</label>)}</div></div>
           <div className="choice-question"><h3>你希望通过化妆修饰什么问题？</h3><small>多选</small><MultiChoice name="concerns" options={concernOptions} selected={concerns} onChange={setConcerns} /></div>
         </fieldset>
 
-        <fieldset className="choice-section"><legend><Hand size={17} /><span><strong>工具</strong><small>我们会据此简化工具与步骤</small></span></legend>
+        <fieldset className="choice-section" aria-labelledby="tools-title"><div className="choice-section__heading"><Hand size={17} /><h2 id="tools-title">工具</h2></div>
           <div className="choice-question"><h3>你有哪些限制？</h3><small>多选</small><MultiChoice name="constraints" options={constraintOptions} selected={constraints} onChange={setConstraints} /></div>
         </fieldset>
 
